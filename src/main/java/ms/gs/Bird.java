@@ -1,52 +1,68 @@
 package ms.gs;
 
 import javax.imageio.ImageIO;
+import javax.swing.Timer;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Bird extends GameObject {
 
     final HashMap<Integer, Boolean> keyboard = new HashMap<>(); //TODO: Encapsulation concept
     private BufferedImage[] images;
+    private Timer timer;
     private Skins skin;
     private boolean jumpLock;
-    private int angle = 360-20;
+    private int angle = 0;
     private int animationCounter = 0;
+
 
     public Bird(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
         animation();
-        skin = Skins.RED;
+        skin = Skins.PEPE;
         images = new BufferedImage[3];
         loadImages();
         keyboard.put(KeyEvent.VK_SPACE, false);
     }
-    void loadImages(){
+
+    void loadImages() {
         try {
             for (int i = 0; i < 3; i++) {
-                images[i] = ImageIO.read(new File("src\\main\\resources\\Birds\\"+skin+"\\Flappybird_"+skin+"_" + i + ".png"));
+                images[i] = ImageIO.read(new File("src\\main\\resources\\Birds\\" + skin + "\\Flappybird_" + skin + "_" + i + ".png"));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    long spaceless;
+
     @Override
     public void update(long elapsedTime) {
-
-        if (inBounds()) {
+        if (inBounds() && getY() <= Main.HEIGHT - getHeight() - 84) {
             loadImages();
             if (keyboard.get(KeyEvent.VK_SPACE)) {
+                angle = 340;
                 jumpBoost(elapsedTime);
             }
             setSpeed(getSpeed() - (Settings.GRAVITY * elapsedTime));
             setY((int) (getY() - (getSpeed() * elapsedTime)));
+            /*
+            if (angle < 360 + 90 && !keyboard.get(KeyEvent.VK_SPACE))
+                angle += 0.008 * elapsedTime * elapsedTime;
+                */
+
+
+        } else {
+            timer.stop();
         }
     }
 
@@ -64,23 +80,21 @@ public class Bird extends GameObject {
     @Override
     public void render(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g2d.rotate(Math.toRadians(angle),getX(),getY());
+        g2d.rotate(Math.toRadians(angle), getX() + getWidth() / 2, getY() + getHeight() / 2);
         g2d.drawImage(images[animationCounter], getX(), getY(), getWidth(), getHeight(), null);
     }
 
-    public void animation(){
-        Timer t = new Timer();
-        t.scheduleAtFixedRate(new TimerTask() {
+    public void animation() {
+        timer = new Timer(100, new ActionListener() {
+            int neg = 1;
+
             @Override
-            public void run() {
-                switch (animationCounter){
-                    case 0-> animationCounter++;
-                    case 1-> animationCounter++;
-                    case 2-> {
-                        animationCounter = 0;
-                    }
-                }
+            public void actionPerformed(ActionEvent e) {
+                animationCounter += neg;
+                if (animationCounter == 2) neg = -1;
+                if (animationCounter == 0) neg = 1;
             }
-        },0,100);
+        });
+        timer.start();
     }
 }

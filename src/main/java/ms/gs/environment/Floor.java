@@ -1,9 +1,13 @@
 package ms.gs.environment;
 
 import ms.gs.GameObject;
+import ms.gs.Main;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,11 +24,11 @@ public class Floor extends GameObject {
             e.printStackTrace();
         }
     }
-    int fx = getX() +getWidth();
 
     @Override
     public void update(long elapsedTime) {
-        setX((int) (getX() - (getSpeed() * elapsedTime)));
+
+        setX((int) (getX() - (getSpeed()*elapsedTime)));
         if (getX() <= -getWidth()) {
             setX(0);
         }
@@ -33,7 +37,7 @@ public class Floor extends GameObject {
     @Override
     public void render(Graphics g) {
         g.drawImage(img, getX(), getY(), getWidth(), getHeight(), null);
-        g.drawImage(img, fx, getY(), getWidth(), getHeight(), null);
-
+        g.drawImage(img, getX()+getWidth(), getY(), getWidth(), getHeight(), null);
+        g.fillRect(0, Main.HEIGHT-80,Main.WIDTH,4);
     }
 }
