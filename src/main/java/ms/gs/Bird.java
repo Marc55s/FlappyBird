@@ -1,7 +1,5 @@
 package ms.gs;
 
-import javafx.scene.control.Skin;
-
 import javax.imageio.ImageIO;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -16,32 +14,32 @@ import java.util.TimerTask;
 public class Bird extends GameObject {
 
     final HashMap<Integer, Boolean> keyboard = new HashMap<>(); //TODO: Encapsulation concept
-    private BufferedImage[] bird;
+    private BufferedImage[] images;
     private Skins skin;
     private boolean jumpLock;
-    private int angle = 10;
+    private int angle = 360-20;
     private int animationCounter = 0;
 
     public Bird(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
         animation();
         skin = Skins.RED;
-        bird = new BufferedImage[3];
+        images = new BufferedImage[3];
         loadImages();
         keyboard.put(KeyEvent.VK_SPACE, false);
     }
     void loadImages(){
         try {
             for (int i = 0; i < 3; i++) {
-                bird[i] = ImageIO.read(new File("src\\main\\resources\\Birds\\"+skin+"\\Flappybird_"+skin+"_" + i + ".png"));
+                images[i] = ImageIO.read(new File("src\\main\\resources\\Birds\\"+skin+"\\Flappybird_"+skin+"_" + i + ".png"));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
     @Override
     public void update(long elapsedTime) {
+
         if (inBounds()) {
             loadImages();
             if (keyboard.get(KeyEvent.VK_SPACE)) {
@@ -49,7 +47,6 @@ public class Bird extends GameObject {
             }
             setSpeed(getSpeed() - (Settings.GRAVITY * elapsedTime));
             setY((int) (getY() - (getSpeed() * elapsedTime)));
-
         }
     }
 
@@ -68,10 +65,9 @@ public class Bird extends GameObject {
     public void render(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.rotate(Math.toRadians(angle),getX(),getY());
-        g2d.drawImage(bird[animationCounter], getX(), getY(), getWidth(), getHeight(), null);
+        g2d.drawImage(images[animationCounter], getX(), getY(), getWidth(), getHeight(), null);
     }
 
-    @Override
     public void animation(){
         Timer t = new Timer();
         t.scheduleAtFixedRate(new TimerTask() {
@@ -81,7 +77,6 @@ public class Bird extends GameObject {
                     case 0-> animationCounter++;
                     case 1-> animationCounter++;
                     case 2-> {
-                        animationCounter++;
                         animationCounter = 0;
                     }
                 }

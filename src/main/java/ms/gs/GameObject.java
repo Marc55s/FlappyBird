@@ -17,7 +17,6 @@ public abstract class GameObject{
         this.y = y;
         this.width = width;
         this.height = height;
-        animation();
     }
 
     public boolean inBounds() {
@@ -28,7 +27,6 @@ public abstract class GameObject{
 
     public abstract void update(long elapsedTime);
 
-    public abstract void animation();
 
     public String getName() {
         return name;

@@ -21,6 +21,9 @@ public class GameKeys implements KeyListener {
         if(e.getKeyCode() == KeyEvent.VK_SPACE){
             bird.keyboard.put(e.getKeyCode(),true);
         }
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+            System.exit(0);
+        }
     }
 
     @Override

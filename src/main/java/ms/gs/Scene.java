@@ -1,6 +1,7 @@
 package ms.gs;
 
 import ms.gs.environment.Background;
+import ms.gs.environment.Floor;
 
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -15,6 +16,7 @@ public class Scene extends JPanel {
 
     Bird bird;
     Background background;
+    Floor floor;
 
 
     public Scene() {
@@ -36,13 +38,14 @@ public class Scene extends JPanel {
         super.paintComponent(g);
 
         gameObjects.forEach(e -> e.render(g));
-
     }
     void setupPlayer(){
-        background = new Background("Background",0,0,0, Main.WIDTH,Main.HEIGHT-80); // FIXME: 06.07.2022 gefährliche hardcode y-position
+        background = new Background("Background",Settings.BACKGROUND_VEOLOCITY,0,0, Main.WIDTH,Main.HEIGHT-80); // FIXME: 06.07.2022 gefährliche hardcode y-position
+        floor = new Floor("Floor",Settings.FLOOR_VEOLOCITY,0,Main.HEIGHT-80+4,Main.WIDTH,80);
         bird = new Bird("Bird",0f,240,320,80,50);
         //Reihenfolge beachten!
         gameObjects.add(background);
+        gameObjects.add(floor);
         gameObjects.add(bird);
     }
 

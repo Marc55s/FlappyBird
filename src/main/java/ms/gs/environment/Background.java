@@ -21,20 +21,20 @@ public class Background extends GameObject {
             e.printStackTrace();
         }
     }
-
+    int offsetX = 20;
     @Override
     public void update(long elapsedTime) {
         //TODO: moving background in slow
-        System.out.println(getSpeed());
+       // setX((int) (getX() - (getSpeed() * elapsedTime)));
+        if (getX() <= -getWidth()+offsetX) {
+            setX(0);
+        }
     }
 
     @Override
     public void render(Graphics g) {
         g.drawImage(background,getX(),getY(),getWidth(),getHeight(),null);
+        g.drawImage(background,getX()+getWidth()-offsetX,getY(),getWidth(),getHeight(),null);
     }
 
-    @Override
-    public void animation() {
-
-    }
 }
