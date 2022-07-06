@@ -43,7 +43,6 @@ public class Bird extends GameObject {
         }
     }
 
-    long spaceless;
 
     @Override
     public void update(long elapsedTime) {

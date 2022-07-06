@@ -22,23 +22,21 @@ public class Background extends GameObject {
             e.printStackTrace();
         }
     }
-    int offsetX = 0;
+
     @Override
     public void update(long elapsedTime) {
         //TODO: moving background in slow
         setX((int) (getX() - (getSpeed() * elapsedTime)));
-        if (getX() <= -getWidth()+offsetX) {
+        if (getX() <= -getWidth()) {
             setX(0);
         }
     }
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(background,getX(),getY(),getWidth(),getHeight(),null);
-        g.drawImage(background,getX()+getWidth()-offsetX,getY(),getWidth(),getHeight(),null);
-        g.drawImage(background,getX()+(2*getWidth())-offsetX,getY(),getWidth(),getHeight(),null);
-        g.setColor(Color.BLACK);
-
+        g.drawImage(background, getX(), getY(), getWidth(), getHeight(), null);
+        g.drawImage(background, getX() + getWidth(), getY(), getWidth(), getHeight(), null);
+        g.drawImage(background, getX() + (2 * getWidth()), getY(), getWidth(), getHeight(), null);
     }
 
 }
