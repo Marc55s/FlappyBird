@@ -26,6 +26,7 @@ public class Scene extends JPanel {
     PipePair pipePair;
     PipePair pipePairSec;
     Collision collision;
+    HighScore highScore;
 
 
 
@@ -36,6 +37,7 @@ public class Scene extends JPanel {
             gameObjectHashMap.put(go.getName(), go);
         }
         collision = new Collision(gameObjectHashMap);
+
     }
 
     void update(long elapsedTime) {
@@ -48,7 +50,8 @@ public class Scene extends JPanel {
             } else {
                 gameObjects.stream().forEach(e -> e.update(elapsedTime));
             }
-            //collision.onCollision(elapsedTime);
+            collision.onCollision(elapsedTime);
+            highScore.setHighscore(collision.getHighscore());
         }
 
     }
@@ -64,12 +67,14 @@ public class Scene extends JPanel {
         pipePair = new PipePair("PipePair", Settings.FLOOR_VELOCITY, Main.WIDTH, -280, 80, 480);
         pipePairSec = new PipePair("PipePairSec", Settings.FLOOR_VELOCITY, Main.WIDTH + Main.WIDTH / 2 + 40, -280, 80, 480);
         floor = new Floor("Floor", Settings.FLOOR_VELOCITY, 0, Main.HEIGHT - 80 + 4, Main.WIDTH, 80);
+        highScore = new HighScore("HighScore",0,200,100,100,150);
         bird = new Bird("Bird", 0f, Main.WIDTH / 2 - 50, Main.HEIGHT / 2 - 57 / 2, 57, 40);
         //Reihenfolge beachten!
         gameObjects.add(background);
         gameObjects.add(pipePair);
         gameObjects.add(pipePairSec);
         gameObjects.add(floor);
+        gameObjects.add(highScore);
         gameObjects.add(bird);
     }
 

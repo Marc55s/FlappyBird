@@ -49,9 +49,9 @@ public class Collision {
         if (birdMidPosition < pipeOne.getX() + pipeOne.getWidth()/2 + highscoreHitboxSize && birdMidPosition > pipeOne.getX() + (pipeOne.getWidth() / 2) - highscoreHitboxSize
                 || birdMidPosition < pipeTwo.getX() + pipeTwo.getWidth()/2+ highscoreHitboxSize &&birdMidPosition > pipeTwo.getX() + (pipeTwo.getWidth() / 2) - highscoreHitboxSize) {
             if (!Scene.stopUpdateExceptBird && !highscoreCounterLock) {
-                //TODO: COMMENTS
                 highscoreCounterLock = true;
                 highscore++;
+                System.out.println(highscore);
             }
         }else{
             highscoreCounterLock = false;
