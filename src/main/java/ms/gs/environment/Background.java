@@ -17,7 +17,7 @@ public class Background extends GameObject {
     public Background(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
         try {
-            background = ImageIO.read(new File("src\\main\\resources\\Background\\fbbackgroundV2.png"));
+            background = ImageIO.read(new File("src\\main\\resources\\Background\\RainbowBackground.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -25,7 +25,7 @@ public class Background extends GameObject {
 
     @Override
     public void update(long elapsedTime) {
-        //TODO: moving background in slow
+
         setX((int) (getX() - (getSpeed() * elapsedTime)));
         if (getX() <= -getWidth()) {
             setX(0);
@@ -34,6 +34,7 @@ public class Background extends GameObject {
 
     @Override
     public void render(Graphics g) {
+
         g.drawImage(background, getX(), getY(), getWidth(), getHeight(), null);
         g.drawImage(background, getX() + getWidth(), getY(), getWidth(), getHeight(), null);
         g.drawImage(background, getX() + (2 * getWidth()), getY(), getWidth(), getHeight(), null);
