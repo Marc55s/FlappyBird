@@ -1,6 +1,8 @@
 package ms.gs;
 
 import javax.swing.JFrame;
+import java.awt.event.KeyEvent;
+import java.io.Serializable;
 
 public class Main {
 
@@ -9,6 +11,7 @@ public class Main {
 
     private final Thread gameloop;
     private final Scene scene;
+    private JFrame jf;
 
     public Main() {
         scene = new Scene();
@@ -57,7 +60,7 @@ public class Main {
     }
 
     void createFrame() {
-        JFrame jf = new JFrame();
+        jf = new JFrame();
         jf.setSize(WIDTH, HEIGHT);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setLocationRelativeTo(null);
