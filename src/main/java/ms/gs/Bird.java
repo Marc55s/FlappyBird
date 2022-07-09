@@ -27,7 +27,7 @@ public class Bird extends GameObject {
     public Bird(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
         animation();
-        skin = Skins.PEPE;
+        skin = Skins.STANDARD;
         images = new BufferedImage[3];
         loadImages();
         keyboard.put(KeyEvent.VK_SPACE, false);
@@ -46,24 +46,24 @@ public class Bird extends GameObject {
 
     @Override
     public void update(long elapsedTime) {
-        if (inBounds() && getY() <= Main.HEIGHT - getHeight() - 84) {
-            loadImages();
-            if (keyboard.get(KeyEvent.VK_SPACE)) {
-                angle = 340;
-                jumpBoost(elapsedTime);
+        loadImages();
+        if (getY() + getHeight() <= Main.HEIGHT - 80) {
+            if (!Scene.stopUpdateExceptBird) {
+                if (keyboard.get(KeyEvent.VK_SPACE)) {
+                    angle = 320;
+                    jumpBoost(elapsedTime);
+                }
             }
             setSpeed(getSpeed() - (Settings.GRAVITY * elapsedTime));
             setY((int) (getY() - (getSpeed() * elapsedTime)));
-            /*
             if (angle < 360 + 90 && !keyboard.get(KeyEvent.VK_SPACE))
-                angle += 0.008 * elapsedTime * elapsedTime;
-                */
-
-
+                angle += 0.01 * elapsedTime;
         } else {
             timer.stop();
+            animationCounter = 1;
         }
     }
+
 
     public void jumpBoost(long elapsedTime) {
         if (!jumpLock) {
@@ -95,5 +95,9 @@ public class Bird extends GameObject {
             }
         });
         timer.start();
+    }
+
+    public Timer getTimer() {
+        return timer;
     }
 }
