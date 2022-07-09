@@ -27,8 +27,7 @@ public class Floor extends GameObject {
 
     @Override
     public void update(long elapsedTime) {
-
-        setX((int) (getX() - (getSpeed()*elapsedTime)));
+        setX((int) Math.floor(getX() - (getSpeed() * elapsedTime)));
         if (getX() <= -getWidth()) {
             setX(0);
         }
@@ -37,7 +36,7 @@ public class Floor extends GameObject {
     @Override
     public void render(Graphics g) {
         g.drawImage(img, getX(), getY(), getWidth(), getHeight(), null);
-        g.drawImage(img, getX()+getWidth(), getY(), getWidth(), getHeight(), null);
-        g.fillRect(0, Main.HEIGHT-80,Main.WIDTH,4);
+        g.drawImage(img, getX() + getWidth(), getY(), getWidth(), getHeight(), null);
+        g.fillRect(0, Main.HEIGHT - getHeight(), Main.WIDTH, 4);
     }
 }
