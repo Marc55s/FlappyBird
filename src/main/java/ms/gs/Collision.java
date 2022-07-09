@@ -6,11 +6,15 @@ import java.util.Map;
 
 public class Collision {
 
-    Map<String, GameObject> go;
-    GameObject bird;
-    GameObject pipeOne;
-    GameObject pipeTwo;
-    int birdMidPosition;
+    private Map<String, GameObject> go;
+    private GameObject bird;
+    private GameObject pipeOne;
+    private GameObject pipeTwo;
+    private int birdMidPosition;
+    private double highscore = 0;
+    double highscoreHitboxSize = 3;
+    boolean highscoreCounterLock = false;
+
 
 
     public Collision(Map<String, GameObject> go) {
@@ -20,9 +24,6 @@ public class Collision {
         pipeTwo = go.get("PipePairSec");
         birdMidPosition = bird.getX() + bird.getWidth() / 2;
     }
-
-    double highscore = 0;
-
     public void onCollision(long elapsedTime) {
 
         if ((bird.getX() + bird.getWidth() >= pipeOne.getX() && bird.getX() <= pipeOne.getX() + pipeOne.getWidth() && bird.getY() <= pipeOne.getY() + pipeOne.getHeight())) {
@@ -45,14 +46,19 @@ public class Collision {
             Scene.stopUpdateExceptBird = true;
         }
 
-        if (birdMidPosition < pipeOne.getX() + pipeOne.getWidth() && birdMidPosition > pipeOne.getX() + pipeOne.getWidth() / 2
-                || birdMidPosition > pipeTwo.getX() + pipeTwo.getWidth() / 2 && birdMidPosition < pipeTwo.getX() + pipeTwo.getWidth()) {
-            if (!Scene.stopUpdateExceptBird) {
+        if (birdMidPosition < pipeOne.getX() + pipeOne.getWidth()/2 + highscoreHitboxSize && birdMidPosition > pipeOne.getX() + (pipeOne.getWidth() / 2) - highscoreHitboxSize
+                || birdMidPosition < pipeTwo.getX() + pipeTwo.getWidth()/2+ highscoreHitboxSize &&birdMidPosition > pipeTwo.getX() + (pipeTwo.getWidth() / 2) - highscoreHitboxSize) {
+            if (!Scene.stopUpdateExceptBird && !highscoreCounterLock) {
                 //TODO: COMMENTS
-                //System.out.println(Math.floor(2 * highscore));
-                double a = (double) 1 / elapsedTime;
-                highscore += a;
+                highscoreCounterLock = true;
+                highscore++;
             }
+        }else{
+            highscoreCounterLock = false;
         }
+    }
+
+    public double getHighscore() {
+        return highscore;
     }
 }
