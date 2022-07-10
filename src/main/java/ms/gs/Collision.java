@@ -51,7 +51,6 @@ public class Collision {
             if (!Scene.stopUpdateExceptBird && !highscoreCounterLock) {
                 highscoreCounterLock = true;
                 highscore++;
-                System.out.println(highscore);
             }
         }else{
             highscoreCounterLock = false;

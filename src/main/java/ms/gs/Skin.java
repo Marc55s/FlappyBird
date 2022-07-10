@@ -1,5 +1,5 @@
 package ms.gs;
 
-public enum Skins {
+public enum Skin {
     BLUE,GREEN,KNUCKLES,PEPE,PINK,RED,STANDARD
 }

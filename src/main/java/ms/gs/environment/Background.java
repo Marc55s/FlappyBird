@@ -17,7 +17,7 @@ public class Background extends GameObject {
     public Background(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
         try {
-            background = ImageIO.read(new File("src\\main\\resources\\Background\\RainbowBackground.png"));
+            background = ImageIO.read(new File("src\\main\\resources\\Background\\fbbackgroundV2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

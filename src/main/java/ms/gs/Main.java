@@ -55,6 +55,9 @@ public class Main {
         gameloop.start();
     }
 
+    void restart (){
+
+    }
     public static void main(String[] args) {
         Main m = new Main();
     }
@@ -65,8 +68,11 @@ public class Main {
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setLocationRelativeTo(null);
         jf.setUndecorated(true);
+        jf.setFocusable(true);
         jf.add(scene);
         jf.addKeyListener(new GameKeys(scene.getBird()));
         jf.setVisible(true);
     }
+
+
 }

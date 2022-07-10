@@ -10,7 +10,6 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.HashMap;
 
 public class Bird extends GameObject {
@@ -18,7 +17,7 @@ public class Bird extends GameObject {
     final HashMap<Integer, Boolean> keyboard = new HashMap<>(); //TODO: Encapsulation concept
     private BufferedImage[] images;
     private Timer timer;
-    private Skins skin;
+    private Skin skin;
     private boolean jumpLock;
     private int angle = 0;
     private int animationCounter = 0;
@@ -27,7 +26,7 @@ public class Bird extends GameObject {
     public Bird(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
         animation();
-        skin = Skins.STANDARD;
+        skin = Skin.STANDARD;
         images = new BufferedImage[3];
         loadImages();
         keyboard.put(KeyEvent.VK_SPACE, false);
@@ -64,6 +63,12 @@ public class Bird extends GameObject {
         }
     }
 
+    @Override
+    public void render(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.rotate(Math.toRadians(angle), getX() + getWidth() / 2, getY() + getHeight() / 2);
+        g2d.drawImage(images[animationCounter], getX(), getY(), getWidth(), getHeight(), null);
+    }
 
     public void jumpBoost(long elapsedTime) {
         if (!jumpLock) {
@@ -74,13 +79,6 @@ public class Bird extends GameObject {
 
     public void releaseLock() {
         jumpLock = false;
-    }
-
-    @Override
-    public void render(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.rotate(Math.toRadians(angle), getX() + getWidth() / 2, getY() + getHeight() / 2);
-        g2d.drawImage(images[animationCounter], getX(), getY(), getWidth(), getHeight(), null);
     }
 
     public void animation() {
@@ -95,6 +93,10 @@ public class Bird extends GameObject {
             }
         });
         timer.start();
+    }
+
+    public void setSkin(Skin skin) {
+        this.skin = skin;
     }
 
     public Timer getTimer() {
