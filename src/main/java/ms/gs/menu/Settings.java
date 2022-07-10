@@ -1,4 +1,4 @@
-package ms.gs;
+package ms.gs.menu;
 
 public class Settings {
 

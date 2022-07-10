@@ -1,5 +1,8 @@
 package ms.gs;
 
+import ms.gs.menu.Settings;
+import ms.gs.menu.Skin;
+
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
 import java.awt.Graphics;
@@ -28,11 +31,11 @@ public class Bird extends GameObject {
         animation();
         skin = Skin.STANDARD;
         images = new BufferedImage[3];
-        loadImages();
+        loadSkinImage();
         keyboard.put(KeyEvent.VK_SPACE, false);
     }
 
-    void loadImages() {
+    void loadSkinImage() {
         try {
             for (int i = 0; i < 3; i++) {
                 images[i] = ImageIO.read(new File("src\\main\\resources\\Birds\\" + skin + "\\Flappybird_" + skin + "_" + i + ".png"));
@@ -45,7 +48,6 @@ public class Bird extends GameObject {
 
     @Override
     public void update(long elapsedTime) {
-        loadImages();
         if (getY() + getHeight() <= Main.HEIGHT - 80) {
             if (!Scene.stopUpdateExceptBird) {
                 if (keyboard.get(KeyEvent.VK_SPACE)) {
@@ -101,5 +103,9 @@ public class Bird extends GameObject {
 
     public Timer getTimer() {
         return timer;
+    }
+
+    public Skin getSkin() {
+        return skin;
     }
 }

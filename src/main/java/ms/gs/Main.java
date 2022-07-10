@@ -1,13 +1,12 @@
 package ms.gs;
 
 import javax.swing.JFrame;
-import java.awt.event.KeyEvent;
-import java.io.Serializable;
 
 public class Main {
 
     public static final int WIDTH = 480, HEIGHT = 640;
     public static boolean isRunning = true;
+    public static GameState gameState = GameState.MENU;
 
     private final Thread gameloop;
     private final Scene scene;
@@ -55,11 +54,8 @@ public class Main {
         gameloop.start();
     }
 
-    void restart (){
-
-    }
     public static void main(String[] args) {
-        Main m = new Main();
+        new Main();
     }
 
     void createFrame() {
@@ -70,7 +66,7 @@ public class Main {
         jf.setUndecorated(true);
         jf.setFocusable(true);
         jf.add(scene);
-        jf.addKeyListener(new GameKeys(scene.getBird()));
+        jf.addKeyListener(scene.getGameKeys());
         jf.setVisible(true);
     }
 

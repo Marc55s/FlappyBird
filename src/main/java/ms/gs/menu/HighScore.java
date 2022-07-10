@@ -1,4 +1,6 @@
-package ms.gs;
+package ms.gs.menu;
+
+import ms.gs.GameObject;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -7,7 +9,7 @@ import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
 
-public class HighScore extends GameObject{
+public class HighScore extends GameObject {
 
     private Font f = null;
     private double highscore = 0;

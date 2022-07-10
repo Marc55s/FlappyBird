@@ -6,11 +6,11 @@ import java.util.Map;
 
 public class Collision {
 
-    private Map<String, GameObject> go;
+    private final Map<String, GameObject> go;
     private GameObject bird;
     private GameObject pipeOne;
     private GameObject pipeTwo;
-    private int birdMidPosition;
+    private final int birdMidPosition;
     private double highscore = 0;
     double highscoreHitboxSize = 3;
     boolean highscoreCounterLock = false;
@@ -24,23 +24,18 @@ public class Collision {
         pipeTwo = go.get("PipePairSec");
         birdMidPosition = bird.getX() + bird.getWidth() / 2;
     }
-    public void onCollision(long elapsedTime) {
-
+    public void onCollision() {
         if ((bird.getX() + bird.getWidth() >= pipeOne.getX() && bird.getX() <= pipeOne.getX() + pipeOne.getWidth() && bird.getY() <= pipeOne.getY() + pipeOne.getHeight())) {
             Scene.stopUpdateExceptBird = true;
-
         }
         if (bird.getX() + bird.getWidth() >= pipeOne.getX() && bird.getX() <= pipeOne.getX() + pipeOne.getWidth() && bird.getY() + bird.getHeight() >= pipeOne.getY() + pipeOne.getHeight() + PipePair.GAP) {
             Scene.stopUpdateExceptBird = true;
-
         }
         if ((bird.getX() + bird.getWidth() >= pipeTwo.getX() && bird.getX() <= pipeTwo.getX() + pipeTwo.getWidth() && bird.getY() <= pipeTwo.getY() + pipeTwo.getHeight())) {
             Scene.stopUpdateExceptBird = true;
-
         }
         if (bird.getX() + bird.getWidth() >= pipeTwo.getX() && bird.getX() <= pipeTwo.getX() + pipeTwo.getWidth() && bird.getY() + bird.getHeight() >= pipeTwo.getY() + pipeTwo.getHeight() + PipePair.GAP) {
             Scene.stopUpdateExceptBird = true;
-
         }
         if (bird.getY() + bird.getHeight() >= Main.HEIGHT - 80) {
             Scene.stopUpdateExceptBird = true;

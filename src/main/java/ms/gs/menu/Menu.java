@@ -1,4 +1,7 @@
-package ms.gs;
+package ms.gs.menu;
+
+import ms.gs.GameObject;
+import ms.gs.Main;
 
 import javax.imageio.ImageIO;
 import java.awt.AlphaComposite;
@@ -9,7 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Menu extends GameObject{
+public class Menu extends GameObject {
 
     private BufferedImage img;
     public Menu(String name, float speed, int x, int y, int width, int height) {
@@ -24,7 +27,7 @@ public class Menu extends GameObject{
     @Override
     public void render(Graphics g) {
         g.setColor(new Color(.1f,.1f,.3f,0.6f));
-        g.fillRect(0,0,Main.WIDTH,Main.HEIGHT);
+        g.fillRect(0,0, Main.WIDTH,Main.HEIGHT);
         g.drawImage(img,getX(),getY(),getWidth(),getHeight(),null);
     }
 
