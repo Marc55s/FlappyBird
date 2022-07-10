@@ -1,13 +1,11 @@
 package ms.gs.menu;
 
-import ms.gs.GameObject;
+import ms.gs.gamelogic.GameObject;
 import ms.gs.Main;
 
 import javax.imageio.ImageIO;
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;

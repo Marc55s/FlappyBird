@@ -1,11 +1,16 @@
-package ms.gs;
+package ms.gs.gamelogic;
 
+import ms.gs.entity.Bird;
+
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class GameKeys implements KeyListener {
 
-    Bird bird;
+    public Bird bird;
 
     public GameKeys(Bird bird) {
         this.bird = bird;
@@ -34,4 +39,5 @@ public class GameKeys implements KeyListener {
             bird.releaseLock();
         }
     }
+
 }

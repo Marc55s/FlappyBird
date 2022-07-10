@@ -1,8 +1,7 @@
 package ms.gs.menu;
 
-import ms.gs.GameObject;
+import ms.gs.gamelogic.GameObject;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;

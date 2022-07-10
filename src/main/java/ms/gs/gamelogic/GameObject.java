@@ -1,4 +1,6 @@
-package ms.gs;
+package ms.gs.gamelogic;
+
+import ms.gs.Main;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;

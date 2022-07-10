@@ -1,5 +1,8 @@
 package ms.gs;
 
+import ms.gs.gamelogic.GameState;
+import ms.gs.screen.Scene;
+
 import javax.swing.JFrame;
 
 public class Main {

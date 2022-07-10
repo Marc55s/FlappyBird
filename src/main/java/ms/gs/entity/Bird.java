@@ -1,7 +1,10 @@
-package ms.gs;
+package ms.gs.entity;
 
+import ms.gs.Main;
+import ms.gs.gamelogic.GameObject;
 import ms.gs.menu.Settings;
 import ms.gs.menu.Skin;
+import ms.gs.screen.Scene;
 
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
@@ -17,7 +20,7 @@ import java.util.HashMap;
 
 public class Bird extends GameObject {
 
-    final HashMap<Integer, Boolean> keyboard = new HashMap<>(); //TODO: Encapsulation concept
+    public final HashMap<Integer, Boolean> keyboard = new HashMap<>(); //TODO: Encapsulation concept
     private BufferedImage[] images;
     private Timer timer;
     private Skin skin;
@@ -35,7 +38,7 @@ public class Bird extends GameObject {
         keyboard.put(KeyEvent.VK_SPACE, false);
     }
 
-    void loadSkinImage() {
+    public void loadSkinImage() {
         try {
             for (int i = 0; i < 3; i++) {
                 images[i] = ImageIO.read(new File("src\\main\\resources\\Birds\\" + skin + "\\Flappybird_" + skin + "_" + i + ".png"));

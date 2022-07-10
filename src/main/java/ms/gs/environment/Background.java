@@ -1,10 +1,8 @@
 package ms.gs.environment;
 
-import ms.gs.GameObject;
-import ms.gs.Main;
+import ms.gs.gamelogic.GameObject;
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;

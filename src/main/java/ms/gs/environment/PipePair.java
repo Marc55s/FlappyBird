@@ -1,6 +1,6 @@
 package ms.gs.environment;
 
-import ms.gs.GameObject;
+import ms.gs.gamelogic.GameObject;
 import ms.gs.Main;
 
 import javax.imageio.ImageIO;

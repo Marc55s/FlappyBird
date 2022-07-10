@@ -1,5 +1,7 @@
-package ms.gs;
+package ms.gs.gamelogic;
 
+import ms.gs.Main;
+import ms.gs.screen.Scene;
 import ms.gs.environment.PipePair;
 
 import java.util.Map;
@@ -12,8 +14,8 @@ public class Collision {
     private GameObject pipeTwo;
     private final int birdMidPosition;
     private double highscore = 0;
-    double highscoreHitboxSize = 3;
-    boolean highscoreCounterLock = false;
+    private double highscoreHitboxSize = 3;
+    private boolean highscoreCounterLock = false;
 
 
 
@@ -50,6 +52,10 @@ public class Collision {
         }else{
             highscoreCounterLock = false;
         }
+    }
+
+    public void resetLock(){
+        highscoreCounterLock = false;
     }
 
     public double getHighscore() {
