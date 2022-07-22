@@ -24,6 +24,12 @@ public class Floor extends GameObject {
 
     @Override
     public void update(long elapsedTime) {
+        /*
+        if x-position is negative false rounding
+        (int) 1.9 -> 1
+        (int) -1.9 -> -1;
+        speed decreases and has to be compensated
+         */
         setX((int) Math.floor(getX() - (getSpeed() * elapsedTime)));
         if (getX() <= -getWidth()) {
             setX(0);

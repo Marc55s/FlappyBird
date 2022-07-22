@@ -1,7 +1,7 @@
 package ms.gs.screen;
 
-import ms.gs.entity.Bird;
 import ms.gs.Main;
+import ms.gs.entity.Bird;
 import ms.gs.environment.Background;
 import ms.gs.environment.Floor;
 import ms.gs.environment.PipePair;
@@ -16,67 +16,58 @@ import ms.gs.menu.Skin;
 
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Scene extends JPanel {
 
     public static boolean stopUpdateExceptBird = false;
-    public static boolean startToUpdate = false;
+    public static boolean runUpdates = false;
     private final List<GameObject> gameObjects = new ArrayList<>();
-    Map<String, GameObject> gameObjectHashMap = new HashMap<>();
+    private final Map<String, GameObject> gameObjectHashMap = new HashMap<>();
 
-    GameKeys gameKeys;
-    Bird bird;
-    Background background;
-    Floor floor;
-    PipePair pipePair;
-    PipePair pipePairSec;
-    Collision collision;
-    HighScore highScore;
-    Menu menu;
-    JComboBox<Skin> skinOptions;
+    private final GameKeys gameKeys;
+    private final JComboBox<Skin> skinOptions;
+    private Bird bird;
+    private Background background;
+    private Floor floor;
+    private PipePair pipePair;
+    private PipePair pipePairSec;
+    private Collision collision;
+    private HighScore highScore;
+    private Menu menu;
 
     public Scene() {
-        setFocusable(true);
-        setBackground(Color.DARK_GRAY);
-        setup();
-        gameKeys = new GameKeys(getBird());
-        Skin[] all = Skin.values();
-        skinOptions = new JComboBox<>(all);
-        skinOptions.setBounds(10, 10, 100, 100);
+        init();
+        gameKeys = new GameKeys(getBird(), this);
+        // TODO: 22.07.2022 buggin combobox at top-left corner
+
+        skinOptions = new JComboBox<>(Skin.values());
+        skinOptions.setLayout(null);
+        skinOptions.setBounds(Main.WIDTH/2-75, 380, 150, 50);
+        skinOptions.setFont(new Font("Monospace",Font.PLAIN,15));
         skinOptions.setVisible(true);
-        // TODO: 10.07.2022 move to Menu.java :
-        Set<AWTKeyStroke> keys = this.getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS);
-        Set newKeys = new HashSet(keys);
-        newKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
-        this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, newKeys);
-        skinOptions.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                bird.setSkin((Skin) skinOptions.getSelectedItem());
-                bird.loadSkinImage();
-                skinOptions.setFocusable(false);
-                skinOptions.setRequestFocusEnabled(false);
-                requestFocusInWindow();
-            }
-        });
         this.add(skinOptions);
-        gameObjects.stream().forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject));
+
+        gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject)); //all initialized GO into Map
         collision = new Collision(gameObjectHashMap);
     }
 
     public void update(long elapsedTime) {
+        bird.setSkin((Skin) skinOptions.getSelectedItem());
+        bird.reloadImages();
         if (bird.keyboard.get(KeyEvent.VK_SPACE)) {
-            startToUpdate = true;
+            runUpdates = true;
             skinOptions.setVisible(false);
         }
-        if (startToUpdate) {
+        if (runUpdates) {
             Main.gameState = GameState.PLAY;
             if (stopUpdateExceptBird) {
                 Main.gameState = GameState.DEAD;
@@ -85,44 +76,51 @@ public class Scene extends JPanel {
                     restart();
                 }
             } else {
-                gameObjects.stream().forEach(e -> e.update(elapsedTime));
+                gameObjects.forEach(e -> e.update(elapsedTime));
             }
             collision.onCollision();
             highScore.setHighscore(collision.getHighscore());
         }
     }
 
-    private void restart() {
-        System.out.println("Restart");
-        Skin oldSkin = bird.getSkin();
-        skinOptions.setVisible(true);
-        gameObjects.clear();
-        setup();
-        gameObjects.stream().forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject));
-        collision = new Collision(gameObjectHashMap);
-        collision.resetLock();
-        gameKeys.bird = bird;
-        bird.setSkin(oldSkin);
-        bird.loadSkinImage();
-        startToUpdate = false;
-        stopUpdateExceptBird = false;
-        Main.gameState = GameState.MENU;
-    }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         gameObjects.forEach(e -> e.render(g2));
-        if (!startToUpdate) {
+        if (!runUpdates) {
             menu.render(g2);
         }
     }
 
-    void setup() {
+    private void restart() {
+        //TODO: 12.07.2022 save highscore
+        System.out.println("Restart");
+        Skin oldSkin = bird.getSkin();
+        skinOptions.setVisible(true);
+        highScore.setHighscoreAllTime((int) Math.max(collision.getHighscore(),highScore.getHighscoreAllTime()));
+        int hs = highScore.getHighscoreAllTime();
+        gameObjects.clear();
+        init();
+        gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject));
+
+        collision = new Collision(gameObjectHashMap);
+        collision.resetLock();
+
+        gameKeys.setBird(bird);
+        highScore.setHighscoreAllTime(hs);
+        bird.setSkin(oldSkin);
+        bird.reloadImages();
+        runUpdates = false;
+        stopUpdateExceptBird = false;
+        Main.gameState = GameState.MENU;
+    }
+
+    private void init() {
+        //FIXME: 12.07.2022 clean up
         menu = new Menu("Menu", 0.1f, 0, 300, Main.WIDTH, Main.HEIGHT);
-        background = new Background("Background", Settings.BACKGROUND_VELOCITY, 0, 0, Main.WIDTH, Main.HEIGHT - 80); // FIXME: 06.07.2022 clean setup
+        background = new Background("Background", Settings.BACKGROUND_VELOCITY, 0, 0, Main.WIDTH, Main.HEIGHT - 80);
         pipePair = new PipePair("PipePair", Settings.FLOOR_VELOCITY, Main.WIDTH, -280, 80, 480);
         pipePairSec = new PipePair("PipePairSec", Settings.FLOOR_VELOCITY, Main.WIDTH + Main.WIDTH / 2 + 40, -280, 80, 480);
         floor = new Floor("Floor", Settings.FLOOR_VELOCITY, 0, Main.HEIGHT - 80 + 4, Main.WIDTH, 80);

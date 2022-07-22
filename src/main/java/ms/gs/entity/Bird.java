@@ -20,25 +20,30 @@ import java.util.HashMap;
 
 public class Bird extends GameObject {
 
-    public final HashMap<Integer, Boolean> keyboard = new HashMap<>(); //TODO: Encapsulation concept
-    private BufferedImage[] images;
+    private final BufferedImage[] images;
+    public  final HashMap<Integer, Boolean> keyboard; //TODO: Encapsulation concept
     private Timer timer;
     private Skin skin;
     private boolean jumpLock;
-    private int angle = 0;
-    private int animationCounter = 0;
+    private int angle;
+    private int animationCounter;
 
+    {
+        images = new BufferedImage[3];
+        keyboard = new HashMap<>();
+        angle = 0;
+        animationCounter = 0;
+        skin = Skin.STANDARD;
+    }
 
     public Bird(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
         animation();
-        skin = Skin.STANDARD;
-        images = new BufferedImage[3];
-        loadSkinImage();
+        reloadImages();
         keyboard.put(KeyEvent.VK_SPACE, false);
     }
 
-    public void loadSkinImage() {
+    public void reloadImages() {
         try {
             for (int i = 0; i < 3; i++) {
                 images[i] = ImageIO.read(new File("src\\main\\resources\\Birds\\" + skin + "\\Flappybird_" + skin + "_" + i + ".png"));
@@ -48,9 +53,9 @@ public class Bird extends GameObject {
         }
     }
 
-
     @Override
     public void update(long elapsedTime) {
+
         if (getY() + getHeight() <= Main.HEIGHT - 80) {
             if (!Scene.stopUpdateExceptBird) {
                 if (keyboard.get(KeyEvent.VK_SPACE)) {
@@ -60,11 +65,14 @@ public class Bird extends GameObject {
             }
             setSpeed(getSpeed() - (Settings.GRAVITY * elapsedTime));
             setY((int) (getY() - (getSpeed() * elapsedTime)));
+            // TODO: 12.07.2022 rotation of bird 
+            /*
             if (angle < 360 + 90 && !keyboard.get(KeyEvent.VK_SPACE))
                 angle += 0.01 * elapsedTime;
+             */
         } else {
-            timer.stop();
             animationCounter = 1;
+            timer.stop();
         }
     }
 
@@ -89,7 +97,6 @@ public class Bird extends GameObject {
     public void animation() {
         timer = new Timer(100, new ActionListener() {
             int neg = 1;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 animationCounter += neg;
@@ -104,11 +111,11 @@ public class Bird extends GameObject {
         this.skin = skin;
     }
 
-    public Timer getTimer() {
-        return timer;
-    }
-
     public Skin getSkin() {
         return skin;
+    }
+
+    public Timer getTimer() {
+        return timer;
     }
 }

@@ -1,11 +1,8 @@
 package ms.gs.gamelogic;
 
-import ms.gs.Main;
-
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 
-public abstract class GameObject{
+public abstract class GameObject {
 
     private String name;
     private float speed;
@@ -21,14 +18,9 @@ public abstract class GameObject{
         this.height = height;
     }
 
-    public boolean inBounds() {
-        return (getX() >= 0 && getX() + getWidth() < Main.WIDTH) && (getY() >= 0 && getY() + getHeight() <= Main.HEIGHT);
-    }
-
     public abstract void render(Graphics g);
 
     public abstract void update(long elapsedTime);
-
 
     public String getName() {
         return name;

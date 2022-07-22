@@ -2,6 +2,7 @@ package ms.gs.environment;
 
 import ms.gs.gamelogic.GameObject;
 import ms.gs.Main;
+import ms.gs.menu.Settings;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics;
@@ -12,10 +13,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class PipePair extends GameObject {
 
-    public static final int GAP = 160;
     private BufferedImage down;
     private BufferedImage up;
-    private int offsetY = 60;
+    private final int offsetY = 60;
 
     public PipePair(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
@@ -44,7 +44,7 @@ public class PipePair extends GameObject {
     @Override
     public void render(Graphics g) {
         g.drawImage(down, getX(), getY(), getWidth(), getHeight(), null);
-        g.drawImage(up, getX(), getY() + getHeight() + GAP, getWidth(), getHeight(), null);
+        g.drawImage(up, getX(), getY() + getHeight() + Settings.PIPE_GAP, getWidth(), getHeight(), null);
 
     }
 
