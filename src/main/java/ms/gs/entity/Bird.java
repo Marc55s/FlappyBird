@@ -2,9 +2,10 @@ package ms.gs.entity;
 
 import ms.gs.Main;
 import ms.gs.gamelogic.GameObject;
+import ms.gs.gamelogic.GameState;
 import ms.gs.menu.Settings;
 import ms.gs.menu.Skin;
-import ms.gs.screen.Scene;
+import ms.gs.screen.GamePanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
@@ -55,9 +56,9 @@ public class Bird extends GameObject {
 
     @Override
     public void update(long elapsedTime) {
-
+        reloadImages();
         if (getY() + getHeight() <= Main.HEIGHT - 80) {
-            if (!Scene.stopUpdateExceptBird) {
+            if (!Main.gameState.equals(GameState.MENU)) {
                 if (keyboard.get(KeyEvent.VK_SPACE)) {
                     angle = 320;
                     jumpBoost(elapsedTime);

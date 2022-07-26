@@ -2,8 +2,7 @@ package ms.gs.gamelogic;
 
 import ms.gs.Main;
 import ms.gs.menu.Settings;
-import ms.gs.screen.Scene;
-import ms.gs.environment.PipePair;
+import ms.gs.screen.GamePanel;
 
 import java.util.Map;
 
@@ -34,35 +33,37 @@ public class Collision {
         pipeTwoMidPositionX = pipeTwo.getX() + (pipeTwo.getWidth() / 2);
     }
 
-    public void onCollision() {
+    public boolean checkForCollision() {
+        boolean collide = false;
         if ((birdLeftPositionX >= pipeOne.getX() && bird.getX() <= pipeOne.getX() + pipeOne.getWidth() && bird.getY() <= pipeOne.getY() + pipeOne.getHeight())) {
-            Scene.stopUpdateExceptBird = true;
+            collide = true;
         }
 
         if (birdLeftPositionX >= pipeOne.getX() && bird.getX() <= pipeOne.getX() + pipeOne.getWidth() && bird.getY() + bird.getHeight() >= pipeOne.getY() + pipeOne.getHeight() + Settings.PIPE_GAP) {
-            Scene.stopUpdateExceptBird = true;
+            collide = true;
         }
 
         if ((birdLeftPositionX >= pipeTwo.getX() && bird.getX() <= pipeTwo.getX() + pipeTwo.getWidth() && bird.getY() <= pipeTwo.getY() + pipeTwo.getHeight())) {
-            Scene.stopUpdateExceptBird = true;
+            collide = true;
         }
 
         if (birdLeftPositionX >= pipeTwo.getX() && bird.getX() <= pipeTwo.getX() + pipeTwo.getWidth() && bird.getY() + bird.getHeight() >= pipeTwo.getY() + pipeTwo.getHeight() + Settings.PIPE_GAP) {
-            Scene.stopUpdateExceptBird = true;
+            collide = true;
         }
         if (bird.getY() + bird.getHeight() >= Main.HEIGHT - 80) {
-            Scene.stopUpdateExceptBird = true;
+            collide = true;
         }
 
         if (birdMidPositionX < pipeOne.getX() + pipeOne.getWidth() / 2 + highscoreHitboxSize && birdMidPositionX > pipeOne.getX() + (pipeOne.getWidth() / 2) - highscoreHitboxSize
                 || birdMidPositionX < pipeTwo.getX() + pipeTwo.getWidth() / 2 + highscoreHitboxSize && birdMidPositionX > pipeTwo.getX() + (pipeTwo.getWidth() / 2) - highscoreHitboxSize) {
-            if (!Scene.stopUpdateExceptBird && !highscoreCounterLock) {
+            if (!collide && !highscoreCounterLock) {
                 highscoreCounterLock = true;
                 highscore++;
             }
         } else {
             highscoreCounterLock = false;
         }
+        return collide;
     }
 
     public void resetLock() {

@@ -1,9 +1,10 @@
 package ms.gs;
 
 import ms.gs.gamelogic.GameState;
-import ms.gs.screen.Scene;
+import ms.gs.screen.GamePanel;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
 
 public class Main {
 
@@ -11,17 +12,43 @@ public class Main {
     public static boolean isRunning = true;
     public static GameState gameState = GameState.MENU;
 
-    private final Thread gameloop;
-    private final Scene scene;
+    private Thread thread;
+    private final GamePanel gamePanel;
     private JFrame jf;
 
     public Main() {
-        scene = new Scene();
+        gamePanel = new GamePanel();
         createFrame();
-        gameloop = new Thread(() -> {
+        setupGameLoop();
+        thread.start();
+    }
+
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (Exception e) {
+        }
+        new Main();
+    }
+
+    private void createFrame() {
+        jf = new JFrame();
+        jf.setSize(WIDTH, HEIGHT);
+        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jf.setLocationRelativeTo(null);
+        jf.setUndecorated(true);
+        jf.setFocusable(true);
+        jf.add(gamePanel);
+        gamePanel.setLayout(null);
+        jf.addKeyListener(gamePanel.getGameKeys());
+        jf.setVisible(true);
+    }
+
+    private void setupGameLoop() {
+        thread = new Thread(() -> {
             final int FRAMES_PER_SECOND = 60;
             final long TIME_BETWEEN_UPDATES = 1_000_000_000 / FRAMES_PER_SECOND;
-            int frameCount;
+            int frameCount = 0;
             final int MAX_UPDATES_BETWEEN_RENDER = 1;
             long lastUpdateTime = System.nanoTime();
             long currTime = System.currentTimeMillis();
@@ -32,19 +59,19 @@ public class Main {
 
                 int updateCount = 0;
                 while (now - lastUpdateTime >= TIME_BETWEEN_UPDATES && updateCount < MAX_UPDATES_BETWEEN_RENDER) {
-                    this.scene.update(elapsedTime);
+                    this.gamePanel.update(elapsedTime);
                     lastUpdateTime += TIME_BETWEEN_UPDATES;
                     updateCount++;
                 }
 
                 // if for some reason an update takes forever, we don't want to do an insane number of catchups.
                 // if you were doing some sort of game that needed to keep EXACT time, you would get rid of this.
+
                 if (now - lastUpdateTime >= TIME_BETWEEN_UPDATES) {
                     lastUpdateTime = now - TIME_BETWEEN_UPDATES;
                 }
 
-                this.scene.paintImmediately(0, 0, WIDTH, HEIGHT); // instant painting
-
+                this.gamePanel.paintImmediately(0, 0, WIDTH, HEIGHT); // instant painting
                 long lastRenderTime = now;
 
                 //Yield until it has been at least the target time between renders. This saves the CPU from hogging.
@@ -54,24 +81,6 @@ public class Main {
                 }
             }
         });
-        gameloop.start();
     }
-
-    public static void main(String[] args) {
-        new Main();
-    }
-
-    void createFrame() {
-        jf = new JFrame();
-        jf.setSize(WIDTH, HEIGHT);
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jf.setLocationRelativeTo(null);
-        jf.setUndecorated(true);
-        jf.setFocusable(true);
-        jf.add(scene);
-        jf.addKeyListener(scene.getGameKeys());
-        jf.setVisible(true);
-    }
-
 
 }

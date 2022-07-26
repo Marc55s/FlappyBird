@@ -16,20 +16,15 @@ import ms.gs.menu.Skin;
 
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Scene extends JPanel {
+public class GamePanel extends JPanel {
 
-    public static boolean stopUpdateExceptBird = false;
-    public static boolean runUpdates = false;
     private final List<GameObject> gameObjects = new ArrayList<>();
     private final Map<String, GameObject> gameObjectHashMap = new HashMap<>();
 
@@ -44,14 +39,17 @@ public class Scene extends JPanel {
     private HighScore highScore;
     private Menu menu;
 
-    public Scene() {
+    public boolean isUpdating = false;
+    private boolean isCollided = false;
+
+    public GamePanel() {
         init();
         gameKeys = new GameKeys(getBird(), this);
         // TODO: 22.07.2022 buggin combobox at top-left corner
 
         skinOptions = new JComboBox<>(Skin.values());
         skinOptions.setLayout(null);
-        skinOptions.setBounds(Main.WIDTH/2-75, 380, 150, 50);
+        skinOptions.setBounds(Main.WIDTH/2-75, 380, 150, 40);
         skinOptions.setFont(new Font("Monospace",Font.PLAIN,15));
         skinOptions.setVisible(true);
         this.add(skinOptions);
@@ -61,15 +59,15 @@ public class Scene extends JPanel {
     }
 
     public void update(long elapsedTime) {
-        bird.setSkin((Skin) skinOptions.getSelectedItem());
-        bird.reloadImages();
+        bird.setSkin((Skin) skinOptions.getSelectedItem());// FIXME: 22.07.2022 
+        if(!isUpdating) bird.reloadImages();
         if (bird.keyboard.get(KeyEvent.VK_SPACE)) {
-            runUpdates = true;
+            isUpdating = true;
             skinOptions.setVisible(false);
         }
-        if (runUpdates) {
+        if (isUpdating) {
             Main.gameState = GameState.PLAY;
-            if (stopUpdateExceptBird) {
+            if (isCollided) {
                 Main.gameState = GameState.DEAD;
                 bird.update(elapsedTime);
                 if (Main.gameState.equals(GameState.DEAD)) {
@@ -78,7 +76,7 @@ public class Scene extends JPanel {
             } else {
                 gameObjects.forEach(e -> e.update(elapsedTime));
             }
-            collision.onCollision();
+            isCollided = collision.checkForCollision();
             highScore.setHighscore(collision.getHighscore());
         }
     }
@@ -89,7 +87,7 @@ public class Scene extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         gameObjects.forEach(e -> e.render(g2));
-        if (!runUpdates) {
+        if (!isUpdating) {
             menu.render(g2);
         }
     }
@@ -105,15 +103,15 @@ public class Scene extends JPanel {
         init();
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject));
 
-        collision = new Collision(gameObjectHashMap);
+        collision = new Collision(gameObjectHashMap); //TODO: getter setter concept
         collision.resetLock();
 
         gameKeys.setBird(bird);
         highScore.setHighscoreAllTime(hs);
         bird.setSkin(oldSkin);
         bird.reloadImages();
-        runUpdates = false;
-        stopUpdateExceptBird = false;
+        isUpdating = false;
+        isCollided = false;
         Main.gameState = GameState.MENU;
     }
 
