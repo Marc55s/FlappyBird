@@ -2,7 +2,6 @@ package ms.gs.gamelogic;
 
 import ms.gs.Main;
 import ms.gs.menu.Settings;
-import ms.gs.screen.GamePanel;
 
 import java.util.Map;
 
@@ -73,4 +72,6 @@ public class Collision {
     public double getHighscore() {
         return highscore;
     }
+
+
 }

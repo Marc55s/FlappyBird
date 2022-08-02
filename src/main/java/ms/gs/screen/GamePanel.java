@@ -70,14 +70,15 @@ public class GamePanel extends JPanel {
             if (isCollided) {
                 Main.gameState = GameState.DEAD;
                 bird.update(elapsedTime);
-                if (Main.gameState.equals(GameState.DEAD)) {
-                    restart();
-                }
-            } else {
+            } else{
                 gameObjects.forEach(e -> e.update(elapsedTime));
             }
+            if (Main.gameState.equals(GameState.DEAD)) {
+                restart();
+            }
+
             isCollided = collision.checkForCollision();
-            highScore.setHighscore(collision.getHighscore());
+            highScore.setScore(collision.getHighscore());
         }
     }
 
@@ -97,17 +98,18 @@ public class GamePanel extends JPanel {
         System.out.println("Restart");
         Skin oldSkin = bird.getSkin();
         skinOptions.setVisible(true);
-        highScore.setHighscoreAllTime((int) Math.max(collision.getHighscore(),highScore.getHighscoreAllTime()));
-        int hs = highScore.getHighscoreAllTime();
+        highScore.setHighScore((int) Math.max(collision.getHighscore(),highScore.getHighScore()));
+        System.out.println("Highscore all time: "+highScore.getHighScore());
+        int hs = highScore.getHighScore();
         gameObjects.clear();
         init();
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject));
 
-        collision = new Collision(gameObjectHashMap); //TODO: getter setter concept
+        collision = new Collision(gameObjectHashMap);
         collision.resetLock();
 
         gameKeys.setBird(bird);
-        highScore.setHighscoreAllTime(hs);
+        highScore.setHighScore(hs); //save to File
         bird.setSkin(oldSkin);
         bird.reloadImages();
         isUpdating = false;

@@ -1,8 +1,9 @@
 package ms.gs.gamelogic;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 
-public abstract class GameObject {
+public abstract class GameObject implements Serializable {
 
     private String name;
     private float speed;
