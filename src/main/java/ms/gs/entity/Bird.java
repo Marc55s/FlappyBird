@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class Bird extends GameObject {
 
     private final BufferedImage[] images;
-    public  final HashMap<Integer, Boolean> keyboard; //TODO: Encapsulation concept
+    public final HashMap<Integer, Boolean> keyboard; //TODO: Encapsulation concept
     private Timer timer;
     private Skin skin;
     private boolean jumpLock;
@@ -54,23 +54,34 @@ public class Bird extends GameObject {
         }
     }
 
+    boolean test = false;
+    long lastTime;
+    long startTime;
+
     @Override
     public void update(long elapsedTime) {
         reloadImages();
         if (getY() + getHeight() <= Main.HEIGHT - 80) {
             if (!Main.gameState.equals(GameState.MENU)) {
                 if (keyboard.get(KeyEvent.VK_SPACE)) {
-                    angle = 320;
+                    angle = 340;
                     jumpBoost(elapsedTime);
+                    test = false;
+                } else {
+                    if (!test) {
+                        lastTime = System.nanoTime();
+                    }
+                    test = true;
                 }
             }
             setSpeed(getSpeed() - (Settings.GRAVITY * elapsedTime));
             setY((int) (getY() - (getSpeed() * elapsedTime)));
-            // TODO: 12.07.2022 rotation of bird 
-            /*
-            if (angle < 360 + 90 && !keyboard.get(KeyEvent.VK_SPACE))
-                angle += 0.01 * elapsedTime;
-             */
+            long fallingTime = (System.nanoTime() - lastTime) / 380_000_000;
+
+            // TODO: 12.07.2022 defining values for falling;
+            if(fallingTime >= 1)
+                if (angle < 360 + 90 && !keyboard.get(KeyEvent.VK_SPACE))
+                    angle += 0.28 * elapsedTime;
         } else {
             animationCounter = 1;
             timer.stop();

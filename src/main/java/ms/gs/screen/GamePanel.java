@@ -43,6 +43,7 @@ public class GamePanel extends JPanel {
     private boolean isCollided = false;
 
     public GamePanel() {
+        this.setDoubleBuffered(true);
         init();
         gameKeys = new GameKeys(getBird(), this);
         // TODO: 22.07.2022 buggin combobox at top-left corner
@@ -53,6 +54,7 @@ public class GamePanel extends JPanel {
         skinOptions.setFont(new Font("Monospace",Font.PLAIN,15));
         skinOptions.setVisible(true);
         this.add(skinOptions);
+        this.add(menu.getjCheckBox());
 
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject)); //all initialized GO into Map
         collision = new Collision(gameObjectHashMap);
@@ -60,23 +62,22 @@ public class GamePanel extends JPanel {
 
     public void update(long elapsedTime) {
         bird.setSkin((Skin) skinOptions.getSelectedItem());// FIXME: 22.07.2022 
-        if(!isUpdating) bird.reloadImages();
+        if(Main.gameState == GameState.MENU) bird.reloadImages();
         if (bird.keyboard.get(KeyEvent.VK_SPACE)) {
-            isUpdating = true;
+            Main.gameState = GameState.PLAY;
             skinOptions.setVisible(false);
         }
-        if (isUpdating) {
-            Main.gameState = GameState.PLAY;
+        if (Main.gameState == GameState.PLAY) {
             if (isCollided) {
                 Main.gameState = GameState.DEAD;
                 bird.update(elapsedTime);
             } else{
                 gameObjects.forEach(e -> e.update(elapsedTime));
             }
-            if (Main.gameState.equals(GameState.DEAD)) {
+            if (Main.gameState.equals(GameState.DEAD) && bird.keyboard.get(KeyEvent.VK_SPACE)) {
                 restart();
+                menu.getjCheckBox().setVisible(true);
             }
-
             isCollided = collision.checkForCollision();
             highScore.setScore(collision.getHighscore());
         }
@@ -88,13 +89,9 @@ public class GamePanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         gameObjects.forEach(e -> e.render(g2));
-        if (!isUpdating) {
-            menu.render(g2);
-        }
     }
 
     private void restart() {
-        //TODO: 12.07.2022 save highscore
         System.out.println("Restart");
         Skin oldSkin = bird.getSkin();
         skinOptions.setVisible(true);
@@ -103,6 +100,8 @@ public class GamePanel extends JPanel {
         int hs = highScore.getHighScore();
         gameObjects.clear();
         init();
+        this.add(menu.getjCheckBox());
+
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject));
 
         collision = new Collision(gameObjectHashMap);
@@ -119,6 +118,7 @@ public class GamePanel extends JPanel {
 
     private void init() {
         //FIXME: 12.07.2022 clean up
+        Main.gameState = GameState.MENU;
         menu = new Menu("Menu", 0.1f, 0, 300, Main.WIDTH, Main.HEIGHT);
         background = new Background("Background", Settings.BACKGROUND_VELOCITY, 0, 0, Main.WIDTH, Main.HEIGHT - 80);
         pipePair = new PipePair("PipePair", Settings.FLOOR_VELOCITY, Main.WIDTH, -280, 80, 480);
@@ -133,6 +133,7 @@ public class GamePanel extends JPanel {
         gameObjects.add(pipePairSec);
         gameObjects.add(floor);
         gameObjects.add(highScore);
+        gameObjects.add(menu);
         gameObjects.add(bird);
     }
 
@@ -143,6 +144,5 @@ public class GamePanel extends JPanel {
     public Bird getBird() {
         return bird;
     }
-
 
 }
