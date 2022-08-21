@@ -62,7 +62,11 @@ public class GamePanel extends JPanel {
 
     public void update(long elapsedTime) {
         bird.setSkin((Skin) skinOptions.getSelectedItem());// FIXME: 22.07.2022 
-        if(Main.gameState == GameState.MENU) bird.reloadImages();
+        if(Main.gameState == GameState.MENU) {
+            bird.reloadImages();
+            background.loadImg();
+            menu.update(elapsedTime);
+        }
         if (bird.keyboard.get(KeyEvent.VK_SPACE)) {
             Main.gameState = GameState.PLAY;
             skinOptions.setVisible(false);
@@ -76,7 +80,6 @@ public class GamePanel extends JPanel {
             }
             if (Main.gameState.equals(GameState.DEAD) && bird.keyboard.get(KeyEvent.VK_SPACE)) {
                 restart();
-                menu.getjCheckBox().setVisible(true);
             }
             isCollided = collision.checkForCollision();
             highScore.setScore(collision.getHighscore());
@@ -94,6 +97,8 @@ public class GamePanel extends JPanel {
     private void restart() {
         System.out.println("Restart");
         Skin oldSkin = bird.getSkin();
+        boolean rainbow = menu.rainbowMode();
+
         skinOptions.setVisible(true);
         highScore.setHighScore((int) Math.max(collision.getHighscore(),highScore.getHighScore()));
         System.out.println("Highscore all time: "+highScore.getHighScore());
@@ -101,6 +106,7 @@ public class GamePanel extends JPanel {
         gameObjects.clear();
         init();
         this.add(menu.getjCheckBox());
+        menu.getjCheckBox().setSelected(rainbow);
 
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject));
 

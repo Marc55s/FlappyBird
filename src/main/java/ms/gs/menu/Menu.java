@@ -1,5 +1,6 @@
 package ms.gs.menu;
 
+import ms.gs.environment.Background;
 import ms.gs.gamelogic.GameObject;
 import ms.gs.Main;
 import ms.gs.gamelogic.GameState;
@@ -21,7 +22,7 @@ public class Menu extends GameObject {
 
     public Menu(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
-        jCheckBox.setBounds(200,450,100,40);
+        jCheckBox.setBounds(200,420,100,40);
         jCheckBox.isSelected();
         try {
             img = ImageIO.read(new File("src\\main\\resources\\Background\\startscreentransparent.png"));
@@ -48,7 +49,11 @@ public class Menu extends GameObject {
 
     @Override
     public void update(long elapsedTime) {
-
+        if(rainbowMode()){
+            Background.backgroundOption = 1;
+        } else{
+            Background.backgroundOption = 0;
+        }
     }
 
     public JCheckBox getjCheckBox() {
