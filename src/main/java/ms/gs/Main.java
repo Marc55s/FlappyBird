@@ -49,7 +49,6 @@ public class Main {
         thread = new Thread(() -> {
             final int FRAMES_PER_SECOND = 60;
             final long TIME_BETWEEN_UPDATES = 1_000_000_000 / FRAMES_PER_SECOND;
-            int frameCount = 0;
             final int MAX_UPDATES_BETWEEN_RENDER = 1;
             long lastUpdateTime = System.nanoTime();
             long currTime = System.currentTimeMillis();
@@ -61,7 +60,8 @@ public class Main {
                 int updateCount = 0;
                 while (now - lastUpdateTime >= TIME_BETWEEN_UPDATES && updateCount < MAX_UPDATES_BETWEEN_RENDER) {
                     this.gamePanel.update(elapsedTime);
-                    this.gamePanel.paintImmediately(0, 0, WIDTH, HEIGHT); // instant painting
+                    //this.gamePanel.paintImmediately(0, 0, WIDTH, HEIGHT); // instant painting TODO: repaint or instant? bugs!
+                    this.gamePanel.repaint();
                     lastUpdateTime += TIME_BETWEEN_UPDATES;
                     updateCount++;
                 }
