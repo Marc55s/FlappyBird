@@ -39,21 +39,18 @@ public class GamePanel extends JPanel {
     private HighScore highScore;
     private Menu menu;
 
-    public boolean isUpdating = false;
     private boolean isCollided = false;
 
     public GamePanel() {
         this.setDoubleBuffered(true);
         init();
         gameKeys = new GameKeys(getBird(), this);
-        // TODO: 22.07.2022 buggin combobox at top-left corner
 
         skinOptions = new JComboBox<>(Skin.values());
         skinOptions.setBounds(Main.WIDTH/2-75, 380, 150, 40);
         skinOptions.setFont(new Font("Monospace",Font.PLAIN,15));
-        //skinOptions.setVisible(true);
         this.add(skinOptions);
-        //this.add(menu.getjCheckBox());
+        this.add(menu.getjCheckBox());
 
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject)); //all initialized GO into Map
         collision = new Collision(gameObjectHashMap);
@@ -65,6 +62,11 @@ public class GamePanel extends JPanel {
             bird.reloadImages();
             background.loadImg();
             menu.update(elapsedTime);
+            if(menu.rainbowMode()){
+                background.setSpeed();
+            }else{
+                background.setSpeed();
+            }
         }
         if (bird.keyboard.get(KeyEvent.VK_SPACE)) {
             Main.gameState = GameState.PLAY;
@@ -104,8 +106,10 @@ public class GamePanel extends JPanel {
         int hs = highScore.getHighScore();
         gameObjects.clear();
         init();
-        //this.add(menu.getjCheckBox());
-        //menu.getjCheckBox().setSelected(rainbow);
+
+        //Save rainbow-state
+        this.add(menu.getjCheckBox());
+        menu.getjCheckBox().setSelected(rainbow);
 
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject));
 
@@ -116,7 +120,6 @@ public class GamePanel extends JPanel {
         highScore.setHighScore(hs); //save to File
         bird.setSkin(oldSkin);
         bird.reloadImages();
-        isUpdating = false;
         isCollided = false;
         Main.gameState = GameState.MENU;
     }

@@ -1,6 +1,7 @@
 package ms.gs.environment;
 
 import ms.gs.gamelogic.GameObject;
+import ms.gs.menu.Settings;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics;
@@ -46,4 +47,7 @@ public class Background extends GameObject {
         g.drawImage(background, getX() + (2 * getWidth()), getY(), getWidth(), getHeight(), null);
     }
 
+    public void setSpeed(){
+        setSpeed(Settings.BACKGROUND_VELOCITY);
+    }
 }

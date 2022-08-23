@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class Bird extends GameObject {
 
     private final BufferedImage[] images;
-    public final HashMap<Integer, Boolean> keyboard; //TODO: Encapsulation concept
+    public final HashMap<Integer, Boolean> keyboard;
     private Timer timer;
     private Skin skin;
     private boolean jumpLock;
