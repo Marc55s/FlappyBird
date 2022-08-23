@@ -23,7 +23,6 @@ public class Menu extends GameObject {
     public Menu(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
         jCheckBox.setBounds(200,420,100,40);
-        jCheckBox.isSelected();
         try {
             img = ImageIO.read(new File("src\\main\\resources\\Background\\startscreentransparent.png"));
         } catch (IOException e) {

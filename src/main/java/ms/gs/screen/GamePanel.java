@@ -49,12 +49,11 @@ public class GamePanel extends JPanel {
         // TODO: 22.07.2022 buggin combobox at top-left corner
 
         skinOptions = new JComboBox<>(Skin.values());
-        skinOptions.setLayout(null);
         skinOptions.setBounds(Main.WIDTH/2-75, 380, 150, 40);
         skinOptions.setFont(new Font("Monospace",Font.PLAIN,15));
-        skinOptions.setVisible(true);
+        //skinOptions.setVisible(true);
         this.add(skinOptions);
-        this.add(menu.getjCheckBox());
+        //this.add(menu.getjCheckBox());
 
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject)); //all initialized GO into Map
         collision = new Collision(gameObjectHashMap);
@@ -105,8 +104,8 @@ public class GamePanel extends JPanel {
         int hs = highScore.getHighScore();
         gameObjects.clear();
         init();
-        this.add(menu.getjCheckBox());
-        menu.getjCheckBox().setSelected(rainbow);
+        //this.add(menu.getjCheckBox());
+        //menu.getjCheckBox().setSelected(rainbow);
 
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject));
 

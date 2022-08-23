@@ -28,6 +28,8 @@ public class Bird extends GameObject {
     private boolean jumpLock;
     private int angle;
     private int animationCounter;
+    private boolean test = false;
+    private long lastTime;
 
     {
         images = new BufferedImage[3];
@@ -54,9 +56,6 @@ public class Bird extends GameObject {
         }
     }
 
-    boolean test = false;
-    long lastTime;
-    long startTime;
 
     @Override
     public void update(long elapsedTime) {

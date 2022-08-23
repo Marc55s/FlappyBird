@@ -27,6 +27,7 @@ public class Main {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (Exception e) {
+            e.printStackTrace();
         }
         new Main();
     }
@@ -38,8 +39,8 @@ public class Main {
         jf.setLocationRelativeTo(null);
         jf.setUndecorated(true);
         jf.setFocusable(true);
-        jf.add(gamePanel);
         gamePanel.setLayout(null);
+        jf.add(gamePanel);
         jf.addKeyListener(gamePanel.getGameKeys());
         jf.setVisible(true);
     }
@@ -60,6 +61,7 @@ public class Main {
                 int updateCount = 0;
                 while (now - lastUpdateTime >= TIME_BETWEEN_UPDATES && updateCount < MAX_UPDATES_BETWEEN_RENDER) {
                     this.gamePanel.update(elapsedTime);
+                    this.gamePanel.paintImmediately(0, 0, WIDTH, HEIGHT); // instant painting
                     lastUpdateTime += TIME_BETWEEN_UPDATES;
                     updateCount++;
                 }
@@ -71,7 +73,6 @@ public class Main {
                     lastUpdateTime = now - TIME_BETWEEN_UPDATES;
                 }
 
-                this.gamePanel.paintImmediately(0, 0, WIDTH, HEIGHT); // instant painting
                 long lastRenderTime = now;
 
                 //Yield until it has been at least the target time between renders. This saves the CPU from hogging.

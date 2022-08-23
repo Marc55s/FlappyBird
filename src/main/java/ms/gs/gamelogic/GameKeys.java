@@ -22,6 +22,7 @@ public class GameKeys implements KeyListener {
         Set<AWTKeyStroke> newKeys = new HashSet<>(keys);
         newKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
         panel.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, newKeys);
+
     }
 
     @Override
