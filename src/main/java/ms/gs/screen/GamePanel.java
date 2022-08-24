@@ -55,7 +55,7 @@ public class GamePanel extends JPanel {
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject)); //all initialized GO into Map
         collision = new Collision(gameObjectHashMap);
     }
-
+    boolean alreadyCalled = false;
     public void update(long elapsedTime) {
         bird.setSkin((Skin) skinOptions.getSelectedItem());// FIXME: 22.07.2022 
         if(Main.gameState == GameState.MENU) {
@@ -64,6 +64,7 @@ public class GamePanel extends JPanel {
             menu.update(elapsedTime);
             if(menu.rainbowMode()){
                 background.setSpeed();
+                //TODO switch through skins
             }else{
                 background.setSpeed();
             }
@@ -92,7 +93,7 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        gameObjects.forEach(e -> e.render(g2));
+        gameObjects.forEach(e -> e.render(g));
     }
 
     private void restart() {

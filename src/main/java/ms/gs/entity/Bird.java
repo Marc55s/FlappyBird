@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Bird extends GameObject {
 
@@ -118,6 +119,19 @@ public class Bird extends GameObject {
         timer.start();
     }
 
+    public void changeSkin(){
+        Skin[] skins = Skin.values();
+        Timer t = new Timer(5000, new ActionListener() {
+            Random r = new Random();
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int internalCounter = r.nextInt(0,skins.length-1);
+                skin = skins[internalCounter];
+                reloadImages();
+            }
+        });
+        t.start();
+    }
     public void setSkin(Skin skin) {
         this.skin = skin;
     }
