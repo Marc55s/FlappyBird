@@ -56,6 +56,7 @@ public class Bird extends GameObject {
         }
     }
 
+    double testTime = 0;
 
     @Override
     public void update(long elapsedTime) {
@@ -66,6 +67,7 @@ public class Bird extends GameObject {
                     angle = 340;
                     jumpBoost(elapsedTime);
                     test = false;
+                    testTime = 0;
                 } else {
                     if (!test) {
                         lastTime = System.nanoTime();
@@ -75,12 +77,16 @@ public class Bird extends GameObject {
             }
             setSpeed(getSpeed() - (Settings.GRAVITY * elapsedTime));
             setY((int) (getY() - (getSpeed() * elapsedTime)));
+            testTime += 1_000_000_000 / 60;
             long fallingTime = (System.nanoTime() - lastTime) / 380_000_000;
 
             // TODO: 12.07.2022 defining values for falling;
-            if(fallingTime >= 1)
+            //if(fallingTime >= 1)
+            System.out.println(testTime);
+            if (testTime / 1000000000 >= 0.35) {
                 if (angle < 360 + 90 && !keyboard.get(KeyEvent.VK_SPACE))
                     angle += 0.28 * elapsedTime;
+            }
         } else {
             animationCounter = 1;
             timer.stop();
@@ -108,6 +114,7 @@ public class Bird extends GameObject {
     public void animation() {
         timer = new Timer(100, new ActionListener() {
             int neg = 1;
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 animationCounter += neg;
