@@ -22,6 +22,7 @@ public class GameKeys implements KeyListener {
         Set<AWTKeyStroke> newKeys = new HashSet<>(keys);
         newKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
         panel.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, newKeys);
+
     }
 
     @Override
@@ -32,7 +33,6 @@ public class GameKeys implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE){
-
             bird.keyboard.put(e.getKeyCode(),true);
         }
         if(e.getKeyCode() == KeyEvent.VK_ESCAPE){

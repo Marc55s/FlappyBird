@@ -1,0 +1,15 @@
+ms\gs\gamelogic\GameState.class
+ms\gs\menu\HighScore.class
+ms\gs\environment\Floor.class
+ms\gs\gamelogic\Collision.class
+ms\gs\Main.class
+ms\gs\screen\Scene.class
+ms\gs\menu\Menu.class
+ms\gs\menu\Skin.class
+ms\gs\gamelogic\GameObject.class
+ms\gs\environment\Background.class
+ms\gs\environment\PipePair.class
+ms\gs\entity\Bird$1.class
+ms\gs\entity\Bird.class
+ms\gs\menu\Settings.class
+ms\gs\gamelogic\GameKeys.class
