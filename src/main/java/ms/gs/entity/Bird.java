@@ -79,7 +79,7 @@ public class Bird extends GameObject {
             long fallingTime = (System.nanoTime() - lastTime) / 380_000_000;
 
             // TODO: 12.07.2022 defining values for falling;
-            if(fallingTime >= 1)
+            if (fallingTime >= 1)
                 if (angle < 360 + 90 && !keyboard.get(KeyEvent.VK_SPACE))
                     angle += 0.28 * elapsedTime;
         } else {
@@ -109,6 +109,7 @@ public class Bird extends GameObject {
     public void animation() {
         timer = new Timer(100, new ActionListener() {
             int neg = 1;
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 animationCounter += neg;
@@ -119,19 +120,24 @@ public class Bird extends GameObject {
         timer.start();
     }
 
-    public void changeSkin(){
+    int rot = 0;
+    double curTime = 0;
+
+    public void changeSkin() {
+        curTime += 1000000000/60;
         Skin[] skins = Skin.values();
-        Timer t = new Timer(5000, new ActionListener() {
-            Random r = new Random();
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int internalCounter = r.nextInt(0,skins.length-1);
-                skin = skins[internalCounter];
+        if(curTime / 1000000000 >= 1) {
+            if (rot < Skin.values().length) {
+                skin = skins[rot];
                 reloadImages();
+                rot++;
+            } else {
+                rot = 0;
             }
-        });
-        t.start();
+            curTime = 0;
+        }
     }
+
     public void setSkin(Skin skin) {
         this.skin = skin;
     }

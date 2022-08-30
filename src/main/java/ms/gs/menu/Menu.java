@@ -52,13 +52,8 @@ public class Menu extends GameObject {
     public void update(long elapsedTime) {
         if(rainbowMode()){
             Background.backgroundOption = 1;
-            //TODO: Rainbowmode
-            Settings.BACKGROUND_VELOCITY = 0.4f;
-
         } else{
             Background.backgroundOption = 0;
-            Settings.BACKGROUND_VELOCITY = 0.07f;
-            //TODO: settings object to reset?
         }
     }
 

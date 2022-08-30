@@ -55,19 +55,16 @@ public class GamePanel extends JPanel {
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject)); //all initialized GO into Map
         collision = new Collision(gameObjectHashMap);
     }
-    boolean alreadyCalled = false;
     public void update(long elapsedTime) {
-        bird.setSkin((Skin) skinOptions.getSelectedItem());// FIXME: 22.07.2022 
         if(Main.gameState == GameState.MENU) {
+            bird.setSkin((Skin) skinOptions.getSelectedItem());// FIXME: 22.07.2022
             bird.reloadImages();
             background.loadImg();
             menu.update(elapsedTime);
-            if(menu.rainbowMode()){
-                background.setSpeed();
-                //TODO switch through skins
-            }else{
-                background.setSpeed();
-            }
+        }
+        if(menu.rainbowMode()){
+            //TODO switch on passing pipe
+            bird.changeSkin();
         }
         if (bird.keyboard.get(KeyEvent.VK_SPACE)) {
             Main.gameState = GameState.PLAY;
