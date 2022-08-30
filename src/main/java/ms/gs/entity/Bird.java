@@ -28,8 +28,6 @@ public class Bird extends GameObject {
     private boolean jumpLock;
     private int angle;
     private int animationCounter;
-    private boolean test = false;
-    private long lastTime;
 
     {
         images = new BufferedImage[3];
@@ -60,7 +58,7 @@ public class Bird extends GameObject {
 
     @Override
     public void update(long elapsedTime) {
-        reloadImages();
+        System.out.println(getSpeed());
         if (getY() + getHeight() <= Main.HEIGHT - 80) {
             if (!Main.gameState.equals(GameState.MENU)) {
                 if (keyboard.get(KeyEvent.VK_SPACE)) {

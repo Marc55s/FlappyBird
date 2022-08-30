@@ -40,7 +40,6 @@ public class HighScore extends GameObject implements Serializable {
     }
 
     private void saveBestScore() {
-        // TODO: 15.07.2022 save in temp
         if (dir.mkdir()) {
             try {
                 if (serializable.createNewFile()) {
