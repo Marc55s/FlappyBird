@@ -13,16 +13,17 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 public class Menu extends GameObject {
 
     private BufferedImage img;
 
-    JCheckBox jCheckBox = new JCheckBox("Rainbow?");
+    JCheckBox jCheckBox = new JCheckBox("Rainbow mode?");
 
     public Menu(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
-        jCheckBox.setBounds(200,420,100,40);
+        jCheckBox.setBounds(360,10,100,40);
         try {
             img = ImageIO.read(new File("src\\main\\resources\\Background\\startscreentransparent.png"));
         } catch (IOException e) {
@@ -45,6 +46,7 @@ public class Menu extends GameObject {
             jCheckBox.setVisible(false);
         }
     }
+
 
     @Override
     public void update(long elapsedTime) {

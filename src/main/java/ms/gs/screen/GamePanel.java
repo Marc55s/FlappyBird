@@ -39,27 +39,32 @@ public class GamePanel extends JPanel {
     private HighScore highScore;
     private Menu menu;
 
-    public boolean isUpdating = false;
     private boolean isCollided = false;
 
     public GamePanel() {
         this.setDoubleBuffered(true);
         init();
         gameKeys = new GameKeys(getBird(), this);
+
         skinOptions = new JComboBox<>(Skin.values());
         skinOptions.setBounds(Main.WIDTH/2-75, 380, 150, 40);
         skinOptions.setFont(new Font("Monospace",Font.PLAIN,15));
         this.add(skinOptions);
+        this.add(menu.getjCheckBox());
+
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject)); //all initialized GO into Map
         collision = new Collision(gameObjectHashMap);
     }
-
     public void update(long elapsedTime) {
-        bird.setSkin((Skin) skinOptions.getSelectedItem());// FIXME: 22.07.2022
         if(Main.gameState == GameState.MENU) {
+            bird.setSkin((Skin) skinOptions.getSelectedItem());// FIXME: 22.07.2022
             bird.reloadImages();
             background.loadImg();
             menu.update(elapsedTime);
+        }
+        if(menu.rainbowMode()){
+            //TODO switch on passing pipe
+            bird.changeSkin();
         }
         if (bird.keyboard.get(KeyEvent.VK_SPACE)) {
             Main.gameState = GameState.PLAY;
@@ -85,9 +90,8 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        //gameObjects.forEach(e -> e.render(g2)); //TODO AWT-EVENT queue error
         for (int i = 0; i < gameObjects.size(); i++) {
-           gameObjects.get(i).render(g2);
+            gameObjects.get(i).render(g2);
         }
     }
 
@@ -102,8 +106,10 @@ public class GamePanel extends JPanel {
         int hs = highScore.getHighScore();
         gameObjects.clear();
         init();
-        //this.add(menu.getjCheckBox());
-        //menu.getjCheckBox().setSelected(rainbow);
+
+        //Save rainbow-state
+        this.add(menu.getjCheckBox());
+        menu.getjCheckBox().setSelected(rainbow);
 
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject));
 
@@ -114,7 +120,6 @@ public class GamePanel extends JPanel {
         highScore.setHighScore(hs); //save to File
         bird.setSkin(oldSkin);
         bird.reloadImages();
-        isUpdating = false;
         isCollided = false;
         Main.gameState = GameState.MENU;
     }

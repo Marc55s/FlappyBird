@@ -60,9 +60,9 @@ public class Main {
                 int updateCount = 0;
                 while (now - lastUpdateTime >= TIME_BETWEEN_UPDATES && updateCount < MAX_UPDATES_BETWEEN_RENDER) {
                     this.gamePanel.update(elapsedTime);
-                    //this.gamePanel.paintImmediately(gamePanel.getBounds());
-                    this.gamePanel.repaint();
+                    //this.gamePanel.paintImmediately(0, 0, WIDTH, HEIGHT); // instant painting TODO: repaint or instant? bugs!
                     lastUpdateTime += TIME_BETWEEN_UPDATES;
+                    this.gamePanel.repaint();
                     updateCount++;
                 }
 

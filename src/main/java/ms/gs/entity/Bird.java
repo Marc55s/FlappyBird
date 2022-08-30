@@ -18,16 +18,19 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Bird extends GameObject {
 
     private final BufferedImage[] images;
-    public final HashMap<Integer, Boolean> keyboard; //TODO: Encapsulation concept
+    public final HashMap<Integer, Boolean> keyboard;
     private Timer timer;
     private Skin skin;
     private boolean jumpLock;
     private int angle;
     private int animationCounter;
+    private boolean test = false;
+    private long lastTime;
 
     {
         images = new BufferedImage[3];
@@ -54,27 +57,31 @@ public class Bird extends GameObject {
         }
     }
 
-    double timeUntilRotation = 0;
 
     @Override
     public void update(long elapsedTime) {
-        System.out.println(getSpeed());
+        reloadImages();
         if (getY() + getHeight() <= Main.HEIGHT - 80) {
             if (!Main.gameState.equals(GameState.MENU)) {
                 if (keyboard.get(KeyEvent.VK_SPACE)) {
                     angle = 340;
                     jumpBoost(elapsedTime);
-                    timeUntilRotation = 0;
+                    test = false;
+                } else {
+                    if (!test) {
+                        lastTime = System.nanoTime();
+                    }
+                    test = true;
                 }
             }
             setSpeed(getSpeed() - (Settings.GRAVITY * elapsedTime));
             setY((int) (getY() - (getSpeed() * elapsedTime)));
-            timeUntilRotation += 1_000_000_000 / 60;
+            long fallingTime = (System.nanoTime() - lastTime) / 380_000_000;
+
             // TODO: 12.07.2022 defining values for falling;
-            if (timeUntilRotation / 1000000000 >= 0.35) {
+            if (fallingTime >= 1)
                 if (angle < 360 + 90 && !keyboard.get(KeyEvent.VK_SPACE))
                     angle += 0.28 * elapsedTime;
-            }
         } else {
             animationCounter = 1;
             timer.stop();
@@ -111,6 +118,24 @@ public class Bird extends GameObject {
             }
         });
         timer.start();
+    }
+
+    int rot = 0;
+    double curTime = 0;
+
+    public void changeSkin() {
+        curTime += 1000000000/60;
+        Skin[] skins = Skin.values();
+        if(curTime / 1000000000 >= 1) {
+            if (rot < Skin.values().length) {
+                skin = skins[rot];
+                reloadImages();
+                rot++;
+            } else {
+                rot = 0;
+            }
+            curTime = 0;
+        }
     }
 
     public void setSkin(Skin skin) {
