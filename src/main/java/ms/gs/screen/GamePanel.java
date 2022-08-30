@@ -62,15 +62,14 @@ public class GamePanel extends JPanel {
             background.loadImg();
             menu.update(elapsedTime);
         }
-        if(menu.rainbowMode()){
-            //TODO switch on passing pipe
-            bird.changeSkin();
-        }
         if (bird.keyboard.get(KeyEvent.VK_SPACE)) {
             Main.gameState = GameState.PLAY;
             skinOptions.setVisible(false);
         }
         if (Main.gameState == GameState.PLAY) {
+            if(menu.rainbowMode()){
+                bird.changeSkin();
+            }
             if (isCollided) {
                 Main.gameState = GameState.DEAD;
                 bird.update(elapsedTime);
