@@ -90,7 +90,9 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        gameObjects.forEach(e -> e.render(g));
+        for (int i = 0; i < gameObjects.size(); i++) {
+            gameObjects.get(i).render(g2);
+        }
     }
 
     private void restart() {
