@@ -50,7 +50,8 @@ public class Bird extends GameObject {
     public void reloadImages() {
         try {
             for (int i = 0; i < 3; i++) {
-                images[i] = ImageIO.read(new File("src\\main\\resources\\Birds\\" + skin + "\\Flappybird_" + skin + "_" + i + ".png"));
+                String s = getSkin().toString().charAt(0) + getSkin().toString().toLowerCase().substring(1);
+                images[i] = ImageIO.read(ClassLoader.getSystemResourceAsStream("Birds/" + s + "/Flappybird_" + s + "_" + i + ".png"));
             }
         } catch (IOException e) {
             e.printStackTrace();

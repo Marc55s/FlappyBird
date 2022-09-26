@@ -21,8 +21,8 @@ public class PipePair extends GameObject {
         super(name, speed, x, y, width, height);
         setY(ThreadLocalRandom.current().nextInt(offsetY - getHeight(), -140));
         try {
-            down = ImageIO.read(new File("src\\main\\resources\\Pipe\\pipe.png"));
-            up = ImageIO.read(new File("src\\main\\resources\\Pipe\\pipeReversed.png"));
+            down = ImageIO.read(ClassLoader.getSystemResourceAsStream("Pipe/pipe.png"));
+            up = ImageIO.read(ClassLoader.getSystemResourceAsStream("Pipe/pipeReversed.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

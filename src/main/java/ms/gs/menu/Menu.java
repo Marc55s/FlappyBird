@@ -23,12 +23,14 @@ public class Menu extends GameObject {
 
     public Menu(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
-        jCheckBox.setBounds(360,10,100,40);
+        jCheckBox.setBounds(360, 10, 100, 40);
+        //img = ImageIO.read(new File("src\\main\\resources\\Background\\startscreentransparent.png"));
         try {
-            img = ImageIO.read(new File("src\\main\\resources\\Background\\startscreentransparent.png"));
+            img = ImageIO.read(ClassLoader.getSystemResourceAsStream("Background/startscreentransparent.png"));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+
     }
 
     @Override

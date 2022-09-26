@@ -23,8 +23,10 @@ public class Background extends GameObject {
     public void loadImg(){
         try {
             switch(backgroundOption) {
-                case 0 -> background = ImageIO.read(new File("src\\main\\resources\\Background\\fbbackgroundV2.png"));
-                case 1 -> background = ImageIO.read(new File("src\\main\\resources\\Background\\RainbowBackground.png"));
+                case 0 ->
+                        background = ImageIO.read(ClassLoader.getSystemResourceAsStream("Background/fbbackgroundV2.png"));
+                case 1 ->
+                        background = ImageIO.read(ClassLoader.getSystemResourceAsStream("Background/RainbowBackground.png"));
             }
         } catch (IOException e) {
             e.printStackTrace();

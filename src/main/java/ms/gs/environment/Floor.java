@@ -16,7 +16,7 @@ public class Floor extends GameObject {
     public Floor(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
         try {
-            img = ImageIO.read(new File("src\\main\\resources\\Floor\\Flappybird_Standard_Floor.png"));
+            img = ImageIO.read(ClassLoader.getSystemResourceAsStream("Floor/Flappybird_Standard_Floor.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

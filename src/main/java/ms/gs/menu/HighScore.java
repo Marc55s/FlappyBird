@@ -26,10 +26,10 @@ public class HighScore extends GameObject implements Serializable {
         super(name, speed, x, y, width, height);
 
         try {
-            f = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/Font/04B_19__.TTF")).deriveFont(80f);
-            f2 = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/Font/04B_19__.TTF")).deriveFont(60f);
-            dir = new File("src\\main\\resources\\save");
-            serializable = new File("src\\main\\resources\\save\\highscore.ser");
+            f = Font.createFont(Font.TRUETYPE_FONT, ClassLoader.getSystemResourceAsStream("Font/04B_19__.TTF")).deriveFont(80f);
+            f2 = Font.createFont(Font.TRUETYPE_FONT, ClassLoader.getSystemResourceAsStream("Font/04B_19__.TTF")).deriveFont(60f);
+            dir = new File("save");
+            serializable = new File("save/highscore.ser");
         } catch (FontFormatException | IOException e) {
             throw new RuntimeException(e);
         }
