@@ -53,32 +53,15 @@ public class Main {
             final int MAX_UPDATES_BETWEEN_RENDER = 1;
             long lastUpdateTime = System.nanoTime();
             long currTime = System.currentTimeMillis();
+            long delta = 0;
             while (isRunning) {
-                long now = System.nanoTime();
-                long elapsedTime = System.currentTimeMillis() - currTime;
-                currTime += elapsedTime;
-
-                int updateCount = 0;
-                while (now - lastUpdateTime >= TIME_BETWEEN_UPDATES && updateCount < MAX_UPDATES_BETWEEN_RENDER) {
-                    this.gamePanel.update(elapsedTime);
-                    lastUpdateTime += TIME_BETWEEN_UPDATES;
+                currTime = System.nanoTime();
+                delta += (currTime - lastUpdateTime) / TIME_BETWEEN_UPDATES;
+                lastUpdateTime = currTime;
+                if (delta >= 1) {
+                    this.gamePanel.update(20);
                     this.gamePanel.repaint();
-                    updateCount++;
-                }
-
-                // if for some reason an update takes forever, we don't want to do an insane number of catchups.
-                // if you were doing some sort of game that needed to keep EXACT time, you would get rid of this.
-
-                if (now - lastUpdateTime >= TIME_BETWEEN_UPDATES) {
-                    lastUpdateTime = now - TIME_BETWEEN_UPDATES;
-                }
-
-                long lastRenderTime = now;
-
-                //Yield until it has been at least the target time between renders. This saves the CPU from hogging.
-                while (now - lastRenderTime < TIME_BETWEEN_UPDATES && now - lastUpdateTime < TIME_BETWEEN_UPDATES) {
-                    Thread.yield();
-                    now = System.nanoTime();
+                    delta--;
                 }
             }
         });
