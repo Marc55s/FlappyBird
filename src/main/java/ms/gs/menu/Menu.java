@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JCheckBox;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,16 +19,19 @@ import java.util.Set;
 public class Menu extends GameObject {
 
     private BufferedImage img;
+    private Font f;
 
     JCheckBox jCheckBox = new JCheckBox("Rainbow mode?");
 
     public Menu(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
         jCheckBox.setBounds(360, 10, 100, 40);
-        //img = ImageIO.read(new File("src\\main\\resources\\Background\\startscreentransparent.png"));
         try {
             img = ImageIO.read(ClassLoader.getSystemResourceAsStream("Background/startscreentransparent.png"));
+            f = Font.createFont(Font.TRUETYPE_FONT, ClassLoader.getSystemResourceAsStream("Font/04B_19__.TTF")).deriveFont(33f);
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (FontFormatException e) {
             throw new RuntimeException(e);
         }
 
@@ -41,30 +45,20 @@ public class Menu extends GameObject {
             g.drawImage(img, getX(), getY(), getWidth(), getHeight(), null);
             jCheckBox.setVisible(true);
         } else if (Main.gameState == GameState.DEAD) {
-            g.setFont(new Font("Arial", Font.PLAIN, 30));
+            g.setFont(f);
             g.drawString("You are dead", Main.WIDTH / 2 - 100, Main.HEIGHT / 2);
-            g.drawString("press space to restart", Main.WIDTH / 2 - 130, Main.HEIGHT / 2 +30);
-        }else{
-            jCheckBox.setVisible(false);
+            g.drawString("press space to restart", Main.WIDTH / 2 - 180, Main.HEIGHT / 2 + 30);
         }
     }
 
 
     @Override
     public void update(long elapsedTime) {
-        if(rainbowMode()){
-            Background.backgroundOption = 1;
-        } else{
-            Background.backgroundOption = 0;
-        }
     }
 
     public JCheckBox getjCheckBox() {
         return jCheckBox;
     }
 
-    public boolean rainbowMode(){
-        return jCheckBox.isSelected();
-    }
 
 }

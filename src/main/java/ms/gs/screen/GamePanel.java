@@ -50,7 +50,6 @@ public class GamePanel extends JPanel {
         skinOptions.setBounds(Main.WIDTH/2-75, 380, 150, 40);
         skinOptions.setFont(new Font("Monospace",Font.PLAIN,15));
         this.add(skinOptions);
-        this.add(menu.getjCheckBox());
 
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject)); //all initialized GO into Map
         collision = new Collision(gameObjectHashMap);
@@ -59,28 +58,30 @@ public class GamePanel extends JPanel {
         if(Main.gameState == GameState.MENU) {
             bird.setSkin((Skin) skinOptions.getSelectedItem());
             bird.reloadImages();
-            background.loadImg();
             menu.update(elapsedTime);
-        }
-        if (bird.keyboard.get(KeyEvent.VK_SPACE)) {
-            Main.gameState = GameState.PLAY;
-            skinOptions.setVisible(false);
+            if (bird.keyboard.get(KeyEvent.VK_SPACE)) {
+                Main.gameState = GameState.PLAY;
+                skinOptions.setVisible(false);
+            }
         }
         if (Main.gameState == GameState.PLAY) {
-            if(menu.rainbowMode()){
-                bird.changeSkin();
-            }
             if (isCollided) {
                 Main.gameState = GameState.DEAD;
                 bird.update(elapsedTime);
-            } else{
-                gameObjects.forEach(e -> e.update(elapsedTime));
+            } else {
+                for (GameObject go : gameObjects) {
+                    go.update(elapsedTime);
+                }
             }
-            if (Main.gameState.equals(GameState.DEAD) && bird.keyboard.get(KeyEvent.VK_SPACE)) {
-                restart();
-            }
+            //TODO: Collision & Highscore
             isCollided = collision.checkForCollision();
             highScore.setScore(collision.getHighscore());
+        }
+        if (Main.gameState.equals(GameState.DEAD)) {
+            if (bird.keyboard.get(KeyEvent.VK_SPACE)) {
+                System.out.println("Restart");
+                restart();
+            }
         }
     }
 
@@ -88,27 +89,24 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        for (int i = 0; i < gameObjects.size(); i++) {
-            gameObjects.get(i).render(g2);
+        long start = System.nanoTime();
+        //g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        for (GameObject gameObject : gameObjects) {
+            gameObject.render(g2);
         }
+        //System.out.println("Rendertime: "+(System.nanoTime()-start));
     }
 
     private void restart() {
-        System.out.println("Restart");
         Skin oldSkin = bird.getSkin();
-        boolean rainbow = menu.rainbowMode();
 
         skinOptions.setVisible(true);
         highScore.setHighScore((int) Math.max(collision.getHighscore(),highScore.getHighScore()));
-        System.out.println("Highscore all time: "+highScore.getHighScore());
         int hs = highScore.getHighScore();
         gameObjects.clear();
         init();
 
         //Save rainbow-state
-        this.add(menu.getjCheckBox());
-        menu.getjCheckBox().setSelected(rainbow);
 
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject));
 

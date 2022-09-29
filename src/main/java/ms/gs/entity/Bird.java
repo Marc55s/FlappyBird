@@ -61,7 +61,6 @@ public class Bird extends GameObject {
 
     @Override
     public void update(long elapsedTime) {
-        reloadImages();
         if (getY() + getHeight() <= Main.HEIGHT - 80) {
             if (!Main.gameState.equals(GameState.MENU)) {
                 if (keyboard.get(KeyEvent.VK_SPACE)) {
@@ -91,8 +90,10 @@ public class Bird extends GameObject {
     @Override
     public void render(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
+        //Rotating back and forth to prevent other Gameobject from rotating around
         g2d.rotate(Math.toRadians(angle), getX() + getWidth() / 2, getY() + getHeight() / 2);
         g2d.drawImage(images[animationCounter], getX(), getY(), getWidth(), getHeight(), null);
+        g2d.rotate((-1) * Math.toRadians(angle), getX() + getWidth() / 2, getY() + getHeight() / 2);
     }
 
     public void jumpBoost(long elapsedTime) {
@@ -124,9 +125,9 @@ public class Bird extends GameObject {
     double curTime = 0;
 
     public void changeSkin() {
-        curTime += 1000000000/60;
+        curTime += 1000000000 / 60;
         Skin[] skins = Skin.values();
-        if(curTime / 1000000000 >= 1) {
+        if (curTime / 1000000000 >= 1) {
             if (rot < Skin.values().length) {
                 skin = skins[rot];
                 reloadImages();

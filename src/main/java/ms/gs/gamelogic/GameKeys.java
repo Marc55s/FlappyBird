@@ -7,6 +7,8 @@ import java.awt.AWTKeyStroke;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,4 +57,5 @@ public class GameKeys implements KeyListener {
     public void setBird(Bird bird) {
         this.bird = bird;
     }
+
 }

@@ -20,13 +20,15 @@ public class Background extends GameObject {
         loadImg();
     }
 
-    public void loadImg(){
+    public void loadImg() {
         try {
-            switch(backgroundOption) {
-                case 0 ->
-                        background = ImageIO.read(ClassLoader.getSystemResourceAsStream("Background/fbbackgroundV2.png"));
-                case 1 ->
-                        background = ImageIO.read(ClassLoader.getSystemResourceAsStream("Background/RainbowBackground.png"));
+            switch (backgroundOption) {
+                case 0 -> {
+                    background = ImageIO.read(ClassLoader.getSystemResourceAsStream("Background/fbbackgroundV2.png"));
+                }
+                case 1 -> {
+                    background = ImageIO.read(ClassLoader.getSystemResourceAsStream("Background/RainbowBackground.png"));
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -39,17 +41,16 @@ public class Background extends GameObject {
         if (getX() <= -getWidth()) {
             setX(0);
         }
-        loadImg();
     }
 
     @Override
     public void render(Graphics g) {
         g.drawImage(background, getX(), getY(), getWidth(), getHeight(), null);
         g.drawImage(background, getX() + getWidth(), getY(), getWidth(), getHeight(), null);
-        g.drawImage(background, getX() + (2 * getWidth()), getY(), getWidth(), getHeight(), null);
+        //g.drawImage(background, getX() + (2 * getWidth()), getY(), getWidth(), getHeight(), null);
     }
 
-    public void setSpeed(){
+    public void setSpeed() {
         setSpeed(Settings.BACKGROUND_VELOCITY);
     }
 }
