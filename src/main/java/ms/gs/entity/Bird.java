@@ -5,7 +5,6 @@ import ms.gs.gamelogic.GameObject;
 import ms.gs.gamelogic.GameState;
 import ms.gs.menu.Settings;
 import ms.gs.menu.Skin;
-import ms.gs.screen.GamePanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
@@ -15,10 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Random;
 
 public class Bird extends GameObject {
 
@@ -27,9 +24,9 @@ public class Bird extends GameObject {
     private Timer timer;
     private Skin skin;
     private boolean jumpLock;
+    private boolean test = false;
     private int angle;
     private int animationCounter;
-    private boolean test = false;
     private long lastTime;
 
     {
@@ -57,7 +54,6 @@ public class Bird extends GameObject {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public void update(long elapsedTime) {
@@ -121,24 +117,6 @@ public class Bird extends GameObject {
         timer.start();
     }
 
-    int rot = 0;
-    double curTime = 0;
-
-    public void changeSkin() {
-        curTime += 1000000000 / 60;
-        Skin[] skins = Skin.values();
-        if (curTime / 1000000000 >= 1) {
-            if (rot < Skin.values().length) {
-                skin = skins[rot];
-                reloadImages();
-                rot++;
-            } else {
-                rot = 0;
-            }
-            curTime = 0;
-        }
-    }
-
     public void setSkin(Skin skin) {
         this.skin = skin;
     }
@@ -147,7 +125,7 @@ public class Bird extends GameObject {
         return skin;
     }
 
-    public Timer getTimer() {
-        return timer;
+    public int getAngle() {
+        return angle;
     }
 }

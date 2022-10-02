@@ -3,7 +3,13 @@ package ms.gs.gamelogic;
 import ms.gs.Main;
 import ms.gs.menu.Settings;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
 import java.util.Map;
+
+import static java.lang.Math.*;
+
 
 public class Collision {
 
@@ -12,12 +18,7 @@ public class Collision {
     private final GameObject pipeOne;
     private final GameObject pipeTwo;
     private final int birdMidPositionX;
-    private final int birdLeftPositionX;
-    private final int pipeOneMidPositionX;
-    private final int pipeTwoMidPositionX;
-    private double highscore = 0;
-    private final double highscoreHitboxSize = 3;
-    private boolean highscoreCounterLock = false;
+    private int angle = 0;
 
 
     public Collision(Map<String, GameObject> go) {
@@ -26,52 +27,61 @@ public class Collision {
         pipeOne = go.get("PipePair");
         pipeTwo = go.get("PipePairSec");
 
-        birdLeftPositionX = bird.getX() + bird.getWidth();
         birdMidPositionX = bird.getX() + (bird.getWidth() / 2);
-        pipeOneMidPositionX = pipeOne.getX() + (pipeOne.getWidth() / 2);
-        pipeTwoMidPositionX = pipeTwo.getX() + (pipeTwo.getWidth() / 2);
     }
+
 
     public boolean checkForCollision() {
         boolean collide = false;
-        if ((birdLeftPositionX >= pipeOne.getX() && bird.getX() <= pipeOne.getX() + pipeOne.getWidth() && bird.getY() <= pipeOne.getY() + pipeOne.getHeight())) {
-            collide = true;
-        }
 
-        if (birdLeftPositionX >= pipeOne.getX() && bird.getX() <= pipeOne.getX() + pipeOne.getWidth() && bird.getY() + bird.getHeight() >= pipeOne.getY() + pipeOne.getHeight() + Settings.PIPE_GAP) {
-            collide = true;
-        }
+        Polygon p = new Polygon();
+        Rectangle r = new Rectangle(pipeOne.getX(), pipeOne.getY(), pipeOne.getWidth(), pipeOne.getHeight());
+        Rectangle r2 = new Rectangle(pipeOne.getX(), pipeOne.getY() + pipeOne.getHeight() + Settings.PIPE_GAP - 10, pipeOne.getWidth(), pipeOne.getHeight());
+        Rectangle r3 = new Rectangle(pipeTwo.getX(), pipeTwo.getY(), pipeTwo.getWidth(), pipeTwo.getHeight());
+        Rectangle r4 = new Rectangle(pipeTwo.getX(), pipeTwo.getY() + pipeTwo.getHeight() + Settings.PIPE_GAP - 10, pipeTwo.getWidth(), pipeTwo.getHeight());
+        Rectangle floor = new Rectangle(0, Main.HEIGHT - 80, Main.WIDTH, 80);
 
-        if ((birdLeftPositionX >= pipeTwo.getX() && bird.getX() <= pipeTwo.getX() + pipeTwo.getWidth() && bird.getY() <= pipeTwo.getY() + pipeTwo.getHeight())) {
-            collide = true;
-        }
+        Point[] ps = rectangleRotate(birdMidPositionX, bird.getY() + bird.getHeight() / 2, bird.getWidth(), bird.getHeight(), angle);
+        p.addPoint(ps[0].x, ps[0].y);
+        p.addPoint(ps[1].x, ps[1].y);
+        p.addPoint(ps[2].x, ps[2].y);
+        p.addPoint(ps[3].x, ps[3].y);
 
-        if (birdLeftPositionX >= pipeTwo.getX() && bird.getX() <= pipeTwo.getX() + pipeTwo.getWidth() && bird.getY() + bird.getHeight() >= pipeTwo.getY() + pipeTwo.getHeight() + Settings.PIPE_GAP) {
-            collide = true;
-        }
-        if (bird.getY() + bird.getHeight() >= Main.HEIGHT - 80) {
-            collide = true;
-        }
 
-        if (birdMidPositionX < pipeOne.getX() + pipeOne.getWidth() / 2 + highscoreHitboxSize && birdMidPositionX > pipeOne.getX() + (pipeOne.getWidth() / 2) - highscoreHitboxSize
-                || birdMidPositionX < pipeTwo.getX() + pipeTwo.getWidth() / 2 + highscoreHitboxSize && birdMidPositionX > pipeTwo.getX() + (pipeTwo.getWidth() / 2) - highscoreHitboxSize) {
-            if (!collide && !highscoreCounterLock) {
-                highscoreCounterLock = true;
-                highscore++;
-            }
-        } else {
-            highscoreCounterLock = false;
-        }
+        if (p.intersects(r)) collide = true;
+        if (p.intersects(r2)) collide = true;
+        if (p.intersects(r3)) collide = true;
+        if (p.intersects(r4)) collide = true;
+        if (p.intersects(floor)) collide = true;
+
         return collide;
     }
 
-    public void resetLock() {
-        highscoreCounterLock = false;
+
+    public void render(Graphics g) {
+        /*
+        g.setColor(Color.RED);
+        if (p != null)
+           g.drawPolygon(p);
+         */
     }
 
-    public double getHighscore() {
-        return highscore;
+    private Point[] rectangleRotate(int cx, int cy, int h, int w, int angle) {
+        Point[] points = new Point[4];
+        double alpha = toRadians(angle + 90);
+        int dx = w / 2;
+        int dy = h / 2;
+        points[0] = new Point((int) (-dx * cos(alpha) - dy * sin(alpha) + cx), (int) (-dx * sin(alpha) + dy * cos(alpha) + cy));
+        points[1] = new Point((int) (dx * cos(alpha) - dy * sin(alpha) + cx), (int) (dx * sin(alpha) + dy * cos(alpha) + cy));
+        points[2] = new Point((int) (dx * cos(alpha) + dy * sin(alpha) + cx), (int) (dx * sin(alpha) - dy * cos(alpha) + cy));
+        points[3] = new Point((int) (-dx * cos(alpha) + dy * sin(alpha) + cx), (int) (-dx * sin(alpha) - dy * cos(alpha) + cy));
+        return points;
     }
 
+    public void setAngle(int angle) {
+        this.angle = angle;
+    }
 
+    public void setEllipse(Ellipse2D e) {
+    }
 }

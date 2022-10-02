@@ -17,7 +17,6 @@ public class Main {
 
     private Thread thread;
     private final GamePanel gamePanel;
-    private JFrame jf;
 
     public Main() {
         gamePanel = new GamePanel();
@@ -36,7 +35,7 @@ public class Main {
     }
 
     private void createFrame() {
-        jf = new JFrame();
+        JFrame jf = new JFrame();
         jf.setBackground(Color.BLACK);
         jf.setSize(WIDTH, HEIGHT);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,7 +73,7 @@ public class Main {
                 }
                 this.gamePanel.repaint();
                 if (time >= 1000000000) {
-                    System.out.println(frames);
+                    //System.out.println(frames);
                     frames = 0;
                     time = 0;
                 }

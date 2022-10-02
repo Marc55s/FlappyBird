@@ -46,5 +46,4 @@ public class PipePair extends GameObject {
         g.drawImage(down, getX(), getY(), getWidth(), getHeight(), null);
         g.drawImage(up, getX(), getY() + getHeight() + Settings.PIPE_GAP, getWidth(), getHeight(), null);
     }
-
 }

@@ -7,5 +7,6 @@ public class Settings {
     public static float FLOOR_VELOCITY = 0.2f;
     public static float BACKGROUND_VELOCITY = 0.07f;
     public static final int PIPE_GAP = 160;
+    public static final int HIGHSCORE_HITBOX_SIZE = 3;
 
 }

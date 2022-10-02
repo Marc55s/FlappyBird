@@ -5,9 +5,7 @@ import ms.gs.menu.Settings;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 public class Background extends GameObject {
@@ -47,10 +45,6 @@ public class Background extends GameObject {
     public void render(Graphics g) {
         g.drawImage(background, getX(), getY(), getWidth(), getHeight(), null);
         g.drawImage(background, getX() + getWidth(), getY(), getWidth(), getHeight(), null);
-        //g.drawImage(background, getX() + (2 * getWidth()), getY(), getWidth(), getHeight(), null);
     }
 
-    public void setSpeed() {
-        setSpeed(Settings.BACKGROUND_VELOCITY);
-    }
 }

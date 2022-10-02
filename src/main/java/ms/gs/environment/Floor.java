@@ -1,12 +1,11 @@
 package ms.gs.environment;
 
-import ms.gs.gamelogic.GameObject;
 import ms.gs.Main;
+import ms.gs.gamelogic.GameObject;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 public class Floor extends GameObject {
