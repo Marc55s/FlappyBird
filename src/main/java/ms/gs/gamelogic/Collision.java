@@ -17,7 +17,6 @@ public class Collision {
     private final GameObject bird;
     private final GameObject pipeOne;
     private final GameObject pipeTwo;
-    private final int birdMidPositionX;
     private int angle = 0;
 
 
@@ -26,44 +25,36 @@ public class Collision {
         bird = go.get("Bird");
         pipeOne = go.get("PipePair");
         pipeTwo = go.get("PipePairSec");
-
-        birdMidPositionX = bird.getX() + (bird.getWidth() / 2);
     }
 
 
     public boolean checkForCollision() {
         boolean collide = false;
 
-        Polygon p = new Polygon();
         Rectangle r = new Rectangle(pipeOne.getX(), pipeOne.getY(), pipeOne.getWidth(), pipeOne.getHeight());
         Rectangle r2 = new Rectangle(pipeOne.getX(), pipeOne.getY() + pipeOne.getHeight() + Settings.PIPE_GAP - 10, pipeOne.getWidth(), pipeOne.getHeight());
         Rectangle r3 = new Rectangle(pipeTwo.getX(), pipeTwo.getY(), pipeTwo.getWidth(), pipeTwo.getHeight());
         Rectangle r4 = new Rectangle(pipeTwo.getX(), pipeTwo.getY() + pipeTwo.getHeight() + Settings.PIPE_GAP - 10, pipeTwo.getWidth(), pipeTwo.getHeight());
         Rectangle floor = new Rectangle(0, Main.HEIGHT - 80, Main.WIDTH, 80);
 
-        Point[] ps = rectangleRotate(birdMidPositionX, bird.getY() + bird.getHeight() / 2, bird.getWidth(), bird.getHeight(), angle);
-        p.addPoint(ps[0].x, ps[0].y);
-        p.addPoint(ps[1].x, ps[1].y);
-        p.addPoint(ps[2].x, ps[2].y);
-        p.addPoint(ps[3].x, ps[3].y);
+        Ellipse2D.Double b = new Ellipse2D.Double(0, 0, bird.getWidth(), bird.getHeight());
+        AffineTransform af = new AffineTransform();
+        af.translate(bird.getX() + bird.getWidth() / 2, bird.getY() + bird.getHeight() / 2);
+        af.rotate(Math.toRadians(angle));
+        af.translate(-bird.getWidth() / 2, -bird.getHeight() / 2);
+        Shape s = af.createTransformedShape(b);
 
-
-        if (p.intersects(r)) collide = true;
-        if (p.intersects(r2)) collide = true;
-        if (p.intersects(r3)) collide = true;
-        if (p.intersects(r4)) collide = true;
-        if (p.intersects(floor)) collide = true;
+        if (s.intersects(r)) collide = true;
+        if (s.intersects(r2)) collide = true;
+        if (s.intersects(r3)) collide = true;
+        if (s.intersects(r4)) collide = true;
+        if (s.intersects(floor)) collide = true;
 
         return collide;
     }
 
-
     public void render(Graphics g) {
-        /*
-        g.setColor(Color.RED);
-        if (p != null)
-           g.drawPolygon(p);
-         */
+        Graphics2D g2 = (Graphics2D) g;
     }
 
     private Point[] rectangleRotate(int cx, int cy, int h, int w, int angle) {
@@ -82,6 +73,4 @@ public class Collision {
         this.angle = angle;
     }
 
-    public void setEllipse(Ellipse2D e) {
-    }
 }
