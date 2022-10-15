@@ -6,8 +6,8 @@ import ms.gs.menu.Settings;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -16,6 +16,7 @@ public class PipePair extends GameObject {
     private BufferedImage down;
     private BufferedImage up;
     private final int offsetY = 60;
+    private Point[] points;
 
     public PipePair(String name, float speed, int x, int y, int width, int height) {
         super(name, speed, x, y, width, height);
@@ -26,24 +27,46 @@ public class PipePair extends GameObject {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        points = spawn(2);
     }
 
     @Override
     public void update(long elapsedTime) {
-        if (getX() <= 0)
-            setX((int) Math.floor(getX() - (getSpeed() * elapsedTime)));
+        for (Point point : points) {
+            if (point.x <= 0) {
+                point.x = (int) Math.floor(point.x - (getSpeed() * elapsedTime));
+            } else {
+                point.x = ((int) (point.x - (getSpeed() * elapsedTime)));
+            }
 
-        setX((int) (getX() - (getSpeed() * elapsedTime)));
-
-        if (getX() <= -getWidth()) {
-            setX(Main.WIDTH + getWidth());
-            setY(ThreadLocalRandom.current().nextInt(offsetY - getHeight(), -140));
+            if (point.x <= -getWidth()) {
+                point.x = Main.WIDTH;
+                point.y = ThreadLocalRandom.current().nextInt(offsetY - getHeight(), -140);
+            }
         }
+    }
+
+    private Point[] spawn(int i) {
+        Point[] p = new Point[i];
+        for (int j = 0; j < i; j++) {
+            p[j] = new Point(Main.WIDTH + (Main.WIDTH / i + 40) * j, (ThreadLocalRandom.current().nextInt(offsetY - getHeight(), -140)));
+        }
+        return p;
     }
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(down, getX(), getY(), getWidth(), getHeight(), null);
-        g.drawImage(up, getX(), getY() + getHeight() + Settings.PIPE_GAP, getWidth(), getHeight(), null);
+        for (Point point : points) {
+            drawPipe(g, point.x, point.y);
+        }
+    }
+
+    private void drawPipe(Graphics g, int x, int y) {
+        g.drawImage(down, x, y, getWidth(), getHeight(), null);
+        g.drawImage(up, x, y + getHeight() + Settings.PIPE_GAP, getWidth(), getHeight(), null);
+    }
+
+    public Point[] getPoints() {
+        return points;
     }
 }

@@ -7,11 +7,10 @@ import ms.gs.gamelogic.GameObject;
 import ms.gs.gamelogic.GameState;
 import ms.gs.screen.GamePanel;
 
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.Graphics;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.URL;
 
 public class HighScore extends GameObject implements Serializable {
 
@@ -22,12 +21,12 @@ public class HighScore extends GameObject implements Serializable {
     private GamePanel panel;
     private Bird bird;
     private PipePair pipe;
-    private PipePair pipesec;
     private File dir;
     private File serializable;
     private int score = 0;
     private int bestScore = 0;
     private boolean scoreCounterLock = false;
+    private final BufferedImage scoreboard;
 
 
     public HighScore(String name, GamePanel panel, float speed, int x, int y, int width, int height) {
@@ -35,9 +34,9 @@ public class HighScore extends GameObject implements Serializable {
         this.panel = panel;
         this.bird = panel.getBird();
         this.pipe = panel.getPipePair();
-        this.pipesec = panel.getPipePairSec();
 
         try {
+            scoreboard = ImageIO.read(ClassLoader.getSystemResourceAsStream("Background/Scoreboard.png"));
             f = Font.createFont(Font.TRUETYPE_FONT, ClassLoader.getSystemResourceAsStream("Font/04B_19__.TTF")).deriveFont(80f);
             f2 = Font.createFont(Font.TRUETYPE_FONT, ClassLoader.getSystemResourceAsStream("Font/04B_19__.TTF")).deriveFont(60f);
             dir = new File("save");
@@ -54,8 +53,8 @@ public class HighScore extends GameObject implements Serializable {
     @Override
     public void update(long elapsedTime) {
         int birdMidPositionX = bird.getX() + (bird.getWidth() / 2);
-        if (birdMidPositionX < pipe.getX() + pipe.getWidth() / 2 + Settings.HIGHSCORE_HITBOX_SIZE && birdMidPositionX > pipe.getX() + (pipe.getWidth() / 2) - Settings.HIGHSCORE_HITBOX_SIZE
-                || birdMidPositionX < pipesec.getX() + pipesec.getWidth() / 2 + Settings.HIGHSCORE_HITBOX_SIZE && birdMidPositionX > pipesec.getX() + (pipesec.getWidth() / 2) - Settings.HIGHSCORE_HITBOX_SIZE) {
+        if (birdMidPositionX < pipe.getPoints()[0].x + pipe.getWidth() / 2 + Settings.HIGHSCORE_HITBOX_SIZE && birdMidPositionX > pipe.getPoints()[0].x + pipe.getWidth() / 2 - Settings.HIGHSCORE_HITBOX_SIZE ||
+                birdMidPositionX < pipe.getPoints()[1].x + pipe.getWidth() / 2 + Settings.HIGHSCORE_HITBOX_SIZE && birdMidPositionX > pipe.getPoints()[1].x + pipe.getWidth() / 2 - Settings.HIGHSCORE_HITBOX_SIZE) {
             if (!panel.isCollided && !scoreCounterLock) {
                 scoreCounterLock = true;
                 score++;
@@ -67,15 +66,25 @@ public class HighScore extends GameObject implements Serializable {
 
     @Override
     public void render(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
         String s = String.valueOf((int) score);
-        g.setFont(f);
-        g.drawString(s, getX(), getY());
-        String bestScore = "Best: " + this.bestScore;
-        if (Main.gameState.equals(GameState.MENU)) {
-            g.setFont(f2);
-            g.drawString(bestScore, Main.WIDTH / 2 - 100, Main.HEIGHT - 400);
+        if (Main.gameState == GameState.PLAY) {
+            g.setFont(f);
+            g.drawString(s, getX(), getY());
+        } else if (Main.gameState.equals(GameState.MENU)) {
         } else if (Main.gameState == GameState.DEAD) {
-            //TODO cool death-msg win
+            //TODO death-msg win
+            g2.setColor(Color.WHITE);
+            g2.drawImage(scoreboard, Main.WIDTH / 2 - (113 * 3) / 2, Main.HEIGHT / 2 - 100, 113 * 3, 57 * 3, null);
+
+            //Highscore
+            g.setFont(f2.deriveFont(43f));
+            String bestScore = String.valueOf(this.bestScore);
+            g.drawString(bestScore, Main.WIDTH / 2 + (113 * 3) / 2 - 75, Main.HEIGHT - 40 - 235 - 1);
+
+            //normalscore
+            g2.setFont(f2.deriveFont(43f));
+            g2.drawString(s, Main.WIDTH / 2 + (113 * 3) / 2 - 75 + 3, Main.HEIGHT - 100 - 235 - 1);
         }
     }
 

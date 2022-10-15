@@ -29,12 +29,11 @@ public class GamePanel extends JPanel {
     private final Map<String, GameObject> gameObjectHashMap = new HashMap<>();
 
     private final GameKeys gameKeys;
-    private final JComboBox<Skin> skinOptions; //TODO focus management and move into menu
+    private final JComboBox<Skin> skinOptions;
     private Bird bird;
     private Background background;
     private Floor floor;
     private PipePair pipePair;
-    private PipePair pipePairSec;
     private Collision collision;
     private HighScore highScore;
     private Menu menu;
@@ -47,13 +46,15 @@ public class GamePanel extends JPanel {
         gameKeys = new GameKeys(getBird(), this);
 
         skinOptions = new JComboBox<>(Skin.values());
+        skinOptions.setFocusable(false);
         skinOptions.setBounds(Main.WIDTH / 2 - 75, 380, 150, 40);
         skinOptions.setFont(new Font("Monospace", Font.PLAIN, 15));
         this.add(skinOptions);
 
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject)); //all initialized GO into Map
-        collision = new Collision(gameObjectHashMap);
+
     }
+
 
     public void update(long elapsedTime) {
         if (Main.gameState == GameState.MENU) {
@@ -90,7 +91,8 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         long start = System.nanoTime();
-        //g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         for (GameObject gameObject : gameObjects) {
             gameObject.render(g2);
         }
@@ -108,7 +110,6 @@ public class GamePanel extends JPanel {
 
         gameObjects.forEach(gameObject -> gameObjectHashMap.put(gameObject.getName(), gameObject));
 
-        collision = new Collision(gameObjectHashMap);
         highScore.resetLock();
 
         gameKeys.setBird(bird);
@@ -126,18 +127,18 @@ public class GamePanel extends JPanel {
         menu = new Menu("Menu", 0.1f, 0, 300, Main.WIDTH, Main.HEIGHT);
         background = new Background("Background", Settings.BACKGROUND_VELOCITY, 0, 0, Main.WIDTH, Main.HEIGHT - 80);
         pipePair = new PipePair("PipePair", Settings.FLOOR_VELOCITY, Main.WIDTH, -280, 80, 480);
-        pipePairSec = new PipePair("PipePairSec", Settings.FLOOR_VELOCITY, Main.WIDTH + Main.WIDTH / 2 + 40, -280, 80, 480);
+        //pipePairSec = new PipePair("PipePairSec", Settings.FLOOR_VELOCITY, Main.WIDTH + Main.WIDTH / 2 + 40, -280, 80, 480);
         floor = new Floor("Floor", Settings.FLOOR_VELOCITY, 0, Main.HEIGHT - 80 + 4, Main.WIDTH, 80);
         highScore = new HighScore("HighScore", this, 0, 200, 100, 100, 150);
 
         //Reihenfolge beachten!
         gameObjects.add(background);
         gameObjects.add(pipePair);
-        gameObjects.add(pipePairSec);
         gameObjects.add(floor);
         gameObjects.add(highScore);
         gameObjects.add(menu);
         gameObjects.add(bird);
+        collision = new Collision(bird, pipePair);
     }
 
     public GameKeys getGameKeys() {
@@ -150,10 +151,6 @@ public class GamePanel extends JPanel {
 
     public PipePair getPipePair() {
         return pipePair;
-    }
-
-    public PipePair getPipePairSec() {
-        return pipePairSec;
     }
 
     public Collision getCollision() {

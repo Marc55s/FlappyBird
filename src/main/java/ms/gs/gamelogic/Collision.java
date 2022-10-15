@@ -1,54 +1,55 @@
 package ms.gs.gamelogic;
 
 import ms.gs.Main;
+import ms.gs.entity.Bird;
+import ms.gs.environment.PipePair;
 import ms.gs.menu.Settings;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
-import java.util.Map;
 
 import static java.lang.Math.*;
 
 
 public class Collision {
 
-    private final Map<String, GameObject> go;
-    private final GameObject bird;
-    private final GameObject pipeOne;
-    private final GameObject pipeTwo;
+    private final Bird bird;
+    private final PipePair pipe;
     private int angle = 0;
 
-
-    public Collision(Map<String, GameObject> go) {
-        this.go = go;
-        bird = go.get("Bird");
-        pipeOne = go.get("PipePair");
-        pipeTwo = go.get("PipePairSec");
+    public Collision(Bird bird, PipePair pair) {
+        this.bird = bird;
+        this.pipe = pair;
     }
 
 
     public boolean checkForCollision() {
         boolean collide = false;
 
-        Rectangle r = new Rectangle(pipeOne.getX(), pipeOne.getY(), pipeOne.getWidth(), pipeOne.getHeight());
-        Rectangle r2 = new Rectangle(pipeOne.getX(), pipeOne.getY() + pipeOne.getHeight() + Settings.PIPE_GAP - 10, pipeOne.getWidth(), pipeOne.getHeight());
-        Rectangle r3 = new Rectangle(pipeTwo.getX(), pipeTwo.getY(), pipeTwo.getWidth(), pipeTwo.getHeight());
-        Rectangle r4 = new Rectangle(pipeTwo.getX(), pipeTwo.getY() + pipeTwo.getHeight() + Settings.PIPE_GAP - 10, pipeTwo.getWidth(), pipeTwo.getHeight());
+        Point[] points = pipe.getPoints();
+        Point one = points[0];
+        Point two = points[1];
+
+        Rectangle r = new Rectangle(one.x, one.y, pipe.getWidth(), pipe.getHeight());
+        Rectangle r2 = new Rectangle(one.x, one.y + pipe.getHeight() + Settings.PIPE_GAP - 10, pipe.getWidth(), pipe.getHeight());
+        Rectangle r3 = new Rectangle(two.x, two.y, pipe.getWidth(), pipe.getHeight());
+        Rectangle r4 = new Rectangle(two.x, two.y + pipe.getHeight() + Settings.PIPE_GAP - 10, pipe.getWidth(), pipe.getHeight());
         Rectangle floor = new Rectangle(0, Main.HEIGHT - 80, Main.WIDTH, 80);
 
-        Ellipse2D.Double b = new Ellipse2D.Double(0, 0, bird.getWidth(), bird.getHeight());
-        AffineTransform af = new AffineTransform();
-        af.translate(bird.getX() + bird.getWidth() / 2, bird.getY() + bird.getHeight() / 2);
-        af.rotate(Math.toRadians(angle));
-        af.translate(-bird.getWidth() / 2, -bird.getHeight() / 2);
-        Shape s = af.createTransformedShape(b);
 
-        if (s.intersects(r)) collide = true;
-        if (s.intersects(r2)) collide = true;
-        if (s.intersects(r3)) collide = true;
-        if (s.intersects(r4)) collide = true;
-        if (s.intersects(floor)) collide = true;
+        Ellipse2D.Double ellipse = new Ellipse2D.Double(0, 0, bird.getWidth(), bird.getHeight());
+        AffineTransform af = new AffineTransform();
+        af.translate(bird.getX() + (bird.getWidth() >> 1), bird.getY() + (bird.getHeight() >> 1));
+        af.rotate(Math.toRadians(angle));
+        af.translate(-bird.getWidth() >> 1, -bird.getHeight() >> 1);
+        Shape birdHitbox = af.createTransformedShape(ellipse);
+
+        if (birdHitbox.intersects(r)) collide = true;
+        if (birdHitbox.intersects(r2)) collide = true;
+        if (birdHitbox.intersects(r3)) collide = true;
+        if (birdHitbox.intersects(r4)) collide = true;
+        if (birdHitbox.intersects(floor)) collide = true;
 
         return collide;
     }
