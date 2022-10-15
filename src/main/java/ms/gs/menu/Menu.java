@@ -25,7 +25,6 @@ public class Menu extends GameObject {
         } catch (IOException | FontFormatException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
@@ -34,10 +33,6 @@ public class Menu extends GameObject {
             g.setColor(new Color(.1f, .1f, .3f, 0.3f));
             g.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
             g.drawImage(img, getX(), getY(), getWidth(), getHeight(), null);
-        } else if (Main.gameState == GameState.DEAD) {
-            g.setFont(f);
-            g.drawString("You are dead", Main.WIDTH / 2 - 100, Main.HEIGHT / 2);
-            g.drawString("press space to restart", Main.WIDTH / 2 - 180, Main.HEIGHT / 2 + 30);
         }
     }
 
